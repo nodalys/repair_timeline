@@ -1,0 +1,291 @@
+<html>
+
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+html,body{height:100vh;overflow:hidden;background:#0f172a;font-family:'Segoe UI',system-ui,-apple-system,sans-serif;color:#e2e8f0}
+#app{height:100vh;display:flex;flex-direction:column;padding:20px 48px 16px;max-width:1200px;margin:0 auto}
+
+h1{font-size:38px;font-weight:800;color:#f8fafc;text-align:center;letter-spacing:-1px}
+.sub{font-size:18px;color:#94a3b8;text-align:center;margin:4px 0 16px}
+
+.stats{display:flex;justify-content:center;gap:48px;margin-bottom:16px}
+.stat{text-align:center;min-width:140px}
+.stat-label{font-size:13px;color:#64748b;text-transform:uppercase;letter-spacing:1.5px;font-weight:600;margin-bottom:2px}
+.stat-val{font-size:48px;font-weight:800;line-height:1;transition:color .3s}
+.stat-unit{font-size:16px;opacity:.7;font-weight:500}
+
+#banner{border-radius:10px;padding:10px 20px;text-align:center;transition:all .4s;min-height:44px;display:flex;align-items:center;justify-content:center;margin-bottom:12px}
+#banner:empty{background:transparent;border:2px solid transparent}
+#banner.exposure{background:rgba(245,158,11,.08);border:2px solid rgba(245,158,11,.4)}
+#banner.outage{background:rgba(239,68,68,.18);border:2px solid #ef4444}
+.b-title{font-size:18px;font-weight:700;margin-bottom:2px}
+.b-text{font-size:15px;font-weight:500}
+
+.tl{flex:1;display:flex;flex-direction:column;justify-content:center;min-height:0}
+
+.axis{display:flex;height:18px;flex-shrink:0}
+.ax-sp{width:200px;flex-shrink:0}
+.ax-t{flex:1;position:relative}
+.ax-tick{position:absolute;transform:translateX(-50%);font-size:12px;color:#475569;font-weight:500}
+.ax-line{display:flex;height:1px;margin-bottom:6px;flex-shrink:0}
+.ax-line-sp{width:200px;flex-shrink:0}
+.ax-line-r{flex:1;background:#334155}
+
+.sec-h{display:flex;height:16px;flex-shrink:0;margin-bottom:3px}
+.sec-sp{width:200px;flex-shrink:0}
+.sec-t{font-size:11px;color:#64748b;text-transform:uppercase;letter-spacing:1px;font-weight:600}
+
+.g-row{display:flex;align-items:center;height:34px;margin-bottom:3px;flex-shrink:0}
+.g-row.empty{visibility:hidden}
+.g-lbl{width:200px;flex-shrink:0;font-size:15px;font-weight:600;color:#cbd5e1;text-align:right;padding-right:14px;white-space:nowrap}
+.g-track{flex:1;position:relative;height:100%}
+.g-bar{position:absolute;height:100%;border-radius:5px;display:flex;align-items:center;justify-content:center;font-size:14px;font-weight:700;color:#fff;transition:left .5s cubic-bezier(.4,0,.2,1),width .5s cubic-bezier(.4,0,.2,1);min-width:20px}
+
+.div-row{display:flex;height:1px;margin:4px 0;flex-shrink:0}
+.div-sp{width:200px;flex-shrink:0}
+.div-l{flex:1;background:#1e293b}
+
+.i-row{display:flex;align-items:center;height:38px;flex-shrink:0;margin-bottom:3px}
+.i-lbl{width:200px;flex-shrink:0;font-size:15px;font-weight:600;color:#cbd5e1;text-align:right;padding-right:14px}
+.i-track{flex:1;position:relative;height:100%}
+.i-bar{position:absolute;height:100%;border-radius:5px;display:flex;align-items:center;justify-content:center;font-size:14px;font-weight:700;color:#fff;transition:left .5s cubic-bezier(.4,0,.2,1),width .5s cubic-bezier(.4,0,.2,1);background:linear-gradient(90deg,#0891b2,#155e75)}
+
+.prog-row{display:flex;align-items:center;margin-top:4px;flex-shrink:0}
+.prog-sp{width:200px;flex-shrink:0}
+.prog-tr{flex:1;height:7px;background:#1e293b;border-radius:4px;position:relative}
+.prog-f{position:absolute;left:0;height:100%;border-radius:4px;transition:width .5s,background .5s}
+
+.ctrls{flex-shrink:0;padding-top:14px}
+.tog-row{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:10px;justify-content:center}
+.tog-wrap{display:inline-flex;align-items:center;gap:0;position:relative}
+.tog{padding:10px 18px;border-radius:8px;border:2px solid #334155;background:transparent;color:#64748b;font-size:15px;font-weight:600;cursor:pointer;transition:all .25s;font-family:inherit;min-width:110px}
+.tog.on{border-color:var(--c);color:var(--c);background:color-mix(in srgb,var(--c) 12%,transparent)}
+.tog.reduced{border-color:var(--c);color:var(--c);background:color-mix(in srgb,var(--c) 6%,transparent);border-style:dashed}
+.tog.has-adj{border-radius:8px 0 0 8px;border-right:none}
+.day-adj{display:flex;flex-direction:column;border:2px solid var(--c);border-left:1px solid color-mix(in srgb,var(--c) 30%,transparent);border-radius:0 8px 8px 0;overflow:hidden;background:color-mix(in srgb,var(--c) 6%,transparent)}
+.day-adj button{width:28px;height:18px;border:none;background:transparent;color:var(--c);font-size:13px;font-weight:700;cursor:pointer;font-family:inherit;display:flex;align-items:center;justify-content:center;padding:0;line-height:1}
+.day-adj button:hover{background:color-mix(in srgb,var(--c) 20%,transparent)}
+.day-adj button:first-child{border-bottom:1px solid color-mix(in srgb,var(--c) 20%,transparent)}
+.act-row{display:flex;gap:10px;justify-content:center;flex-wrap:wrap}
+.act{padding:10px 22px;border-radius:8px;border:none;font-size:15px;font-weight:700;cursor:pointer;font-family:inherit}
+#fault-btn{background:#dc2626;color:#fff}
+#fault-btn.fired{background:#7f1d1d;opacity:.5;cursor:default}
+#reset-btn{background:transparent;border:2px solid #334155;color:#64748b;font-weight:500}
+#magic-btn{width:36px;height:36px;border-radius:8px;background:#1e293b;border:2px solid #334155;color:#475569;font-size:16px;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:all .25s}
+#magic-btn:hover{border-color:#22c55e;color:#22c55e;background:rgba(34,197,94,.1)}
+
+/* Legend overlay */
+#leg-toggle{position:fixed;bottom:12px;right:12px;width:32px;height:32px;border-radius:6px;background:#1e293b;border:1px solid #334155;color:#475569;font-size:14px;cursor:pointer;display:flex;align-items:center;justify-content:center;z-index:100;font-family:inherit}
+#leg-toggle:hover{color:#94a3b8;border-color:#475569}
+#legend-panel{position:fixed;bottom:0;right:0;width:680px;max-height:50vh;overflow-y:auto;background:#0f172a;border:1px solid #334155;border-radius:12px 0 0 0;padding:16px 20px;z-index:99;display:none;box-shadow:0 -4px 20px rgba(0,0,0,.5)}
+#legend-panel.open{display:block}
+.legend-t{font-size:11px;color:#475569;text-transform:uppercase;letter-spacing:1px;font-weight:600;margin-bottom:8px}
+.leg-grid{display:grid;grid-template-columns:1fr 1fr;gap:6px}
+.leg-card{background:#0f172a;border:1px solid #1e293b;border-radius:6px;padding:6px 10px}
+.leg-head{display:flex;align-items:center;gap:6px;margin-bottom:2px}
+.leg-dot{width:8px;height:8px;border-radius:2px;flex-shrink:0}
+.leg-name{font-size:12px;font-weight:600}
+.leg-meta{font-size:10px;color:#475569;margin-left:auto}
+.leg-detail{font-size:10px;color:#94a3b8;margin-bottom:2px}
+.leg-gl{font-size:10px}
+.leg-gl em{color:#22c55e;font-weight:600;font-style:normal}
+.leg-gl span{color:#cbd5e1}
+.leg-gl small{color:#475569}
+.leg-foot{font-size:10px;color:#475569;margin-top:8px;line-height:1.5}
+</style>
+
+<div id="app">
+  <h1>The Repair Timeline</h1>
+  <p class="sub"></p>
+
+  <div class="stats">
+    <div class="stat">
+      <div class="stat-label">Industry</div>
+      <div class="stat-val" style="color:#22d3ee">11</div>
+      <div class="stat-unit" style="color:#22d3ee">days</div>
+    </div>
+    <div class="stat">
+      <div class="stat-label">Government</div>
+      <div class="stat-val" id="s-gov" style="color:#475569">—</div>
+      <div class="stat-unit" id="s-gov-u"></div>
+    </div>
+    <div class="stat">
+      <div class="stat-label">Total to repair</div>
+      <div class="stat-val" id="s-tot" style="color:#f8fafc">11</div>
+      <div class="stat-unit" style="color:#f8fafc">days</div>
+    </div>
+  </div>
+
+  <div id="banner"></div>
+  <div class="tl" id="timeline"></div>
+
+  <div class="ctrls">
+    <div class="tog-row" id="toggles"></div>
+    <div class="act-row" id="actions"></div>
+  </div>
+</div>
+
+<button id="leg-toggle" onclick="document.getElementById('legend-panel').classList.toggle('open')">i</button>
+<div id="legend-panel">
+  <div class="legend-t">Facilitator reference</div>
+  <div class="leg-grid" id="leg-grid"></div>
+  <div class="leg-foot">
+    <b>Colour:</b> Amber=Sit.0 (point of contact) · Red=Sit.1 (can the ship move?) · Purple=Sit.2 (how fast?)<br>
+    <b>Cost:</b> $200M/day (NetBlocks COST, mid-tier ASEAN economy)<br>
+    <b>Permitting clicks:</b> 1st=30d → 2nd=7d → ✦ button=0d (pre-clearance reveal)<br>
+    <b>Flow:</b> Toggle the 4 Scenario&nbsp;1 barriers ON → ⚡ Second fault reveals the EEZ barrier (Sit.1.5) + outage banner → Exercise: toggle barriers OFF as participants remove them. Banner persists.
+  </div>
+</div>
+
+<script>
+var PROCS=[
+  {id:'coord',label:'No lead agency',days:3,color:'#f59e0b',sit:0,detail:'No single point of contact — operator contacts 4 agencies separately',guideline:'Appoint a single coordinating agency',ref:'Principle 8(c), Annex D(i)'},
+  {id:'vessel',label:'Cabotage',days:7,color:'#ef4444',sit:1,detail:'Foreign-flagged ship blocked — cabotage waiver process',guideline:'Do not define cable repair as cabotage; no flag/crewing restrictions',ref:'Annex D(viii)–(ix)'},
+  {id:'trade',label:'Custom duties',days:5,color:'#ef4444',sit:1,detail:'Equipment held at port for customs duty assessment',guideline:'Exempt repair equipment from customs duties',ref:'Annex D(vi)–(vii)'},
+  {id:'permit',label:'Permitting',days:30,color:'#a855f7',sit:2,detail:'Multiple agencies — spatial zoning, security clearance, environmental review, underwater work permit — 30+ working days',guideline:'Annual pre-clearance of vessel & crew; 7–10 day target',ref:'Annex D(ii)–(iii)'},
+  {id:'transit_cl',label:'EEZ entry paperwork',days:3,color:'#ef4444',sit:1,detail:'Ship diverted to port for EEZ entry / temporary importation paperwork',guideline:'No port entry for ships repairing beyond territorial waters',ref:'Annex D(v),(vii)'}
+];
+var IND=11,COST=200;
+var active={},permitSt=0,fault2=false,customDays={};
+
+function pDays(){var base=permitSt===1?30:permitSt===2?7:0;return customDays['permit']!=null?customDays['permit']:base}
+function getDays(p){if(customDays[p.id]!=null)return customDays[p.id];return p.days;}
+function gDays(){
+  var s=0;
+  for(var i=0;i<PROCS.length;i++){
+    var p=PROCS[i];
+    if(p.id==='permit')s+=pDays();
+    else if(active[p.id])s+=getDays(p);
+  }
+  return s;
+}
+function adjDays(id,delta,e){
+  if(e)e.stopPropagation();
+  var p=null;for(var i=0;i<PROCS.length;i++)if(PROCS[i].id===id)p=PROCS[i];
+  var cur=id==='permit'?pDays():getDays(p);
+  var nv=Math.max(0,cur+delta);
+  customDays[id]=nv;
+  render();
+}
+// "Any barrier active" — used for stat colouring
+function anyOn(){
+  for(var i=0;i<PROCS.length;i++){
+    var p=PROCS[i];
+    if(p.id==='permit'){if(permitSt>0)return true;}
+    else if(active[p.id])return true;
+  }
+  return false;
+}
+// The four Scenario 1 barriers are all on (EEZ excluded)
+function allFourOn(){
+  return !!active['coord'] && !!active['vessel'] && !!active['trade'] && permitSt>=1;
+}
+
+function toggle(id){
+  if(id==='permit'){if(permitSt===0){permitSt=1;delete customDays['permit'];}else if(permitSt===1){permitSt=2;delete customDays['permit'];}}
+  else{active[id]=!active[id];if(!active[id])delete customDays[id];}
+  render();
+}
+function preClear(){permitSt=3;delete customDays['permit'];render()}
+function fireFault(){
+  if(!fault2&&allFourOn()){
+    fault2=true;
+    active['transit_cl']=true;
+    render();
+  }
+}
+function reset(){active={};permitSt=0;fault2=false;customDays={};render()}
+
+function pct(d,m){return(d/m*100)+'%'}
+
+function render(){
+  var gd=gDays(),tot=IND+gd,has=anyOn(),mx=Math.max(tot+4,62);
+
+  // Stats
+  var ge=document.getElementById('s-gov'),gu=document.getElementById('s-gov-u');
+  ge.textContent=has?'+'+gd:'—';
+  ge.style.color=has?(gd===0?'#22c55e':'#ef4444'):'#475569';
+  gu.textContent=has?'days':'';gu.style.color=ge.style.color;
+  document.getElementById('s-tot').textContent=tot;
+
+  // Banner — persists once the second fault has fired
+  var b=document.getElementById('banner');
+  if(fault2){
+    b.className='outage';
+    b.innerHTML='<div><div class="b-title" style="color:#fca5a5">\u26A0 SECOND FAULT \u2014 Network outage</div><div class="b-text" style="color:#fca5a5">Estimated impact: <strong>'+COST+'M per day</strong></div></div>';
+  }else{b.className='';b.innerHTML=''}
+
+  // Timeline
+  var tl=document.getElementById('timeline'),h='';
+  var tks=[];for(var t=0;t<=mx;t+=7)tks.push(t);
+
+  h+='<div class="axis"><div class="ax-sp"></div><div class="ax-t">';
+  for(var i=0;i<tks.length;i++)h+='<span class="ax-tick" style="left:'+pct(tks[i],mx)+'">'+tks[i]+'</span>';
+  h+='</div></div>';
+  h+='<div class="ax-line"><div class="ax-line-sp" style="text-align:right;padding-right:14px;font-size:11px;color:#475569;font-weight:500">DAYS \u2192</div><div class="ax-line-r"></div></div>';
+
+  h+='<div class="sec-h"><div class="sec-sp"></div><div class="sec-t">Regulatory &amp; clearance processes</div></div>';
+
+  var cum=0;
+  for(var i=0;i<PROCS.length;i++){
+    var p=PROCS[i],isP=p.id==='permit';
+    var on=isP?(permitSt>0&&permitSt<3):!!active[p.id];
+    var d=isP?pDays():getDays(p);
+    if(on){
+      h+='<div class="g-row"><div class="g-lbl">'+p.label+'</div><div class="g-track"><div class="g-bar" style="left:'+pct(cum,mx)+';width:'+pct(d,mx)+';background:'+p.color+'">'+d+'d</div></div></div>';
+      cum+=d;
+    }else{
+      h+='<div class="g-row empty"><div class="g-lbl">-</div><div class="g-track"></div></div>';
+    }
+  }
+
+  h+='<div class="div-row"><div class="div-sp"></div><div class="div-l"></div></div>';
+  h+='<div class="sec-h"><div class="sec-sp"></div><div class="sec-t">Industry repair path</div></div>';
+  h+='<div class="i-row"><div class="i-lbl">Mobilise and repair</div><div class="i-track"><div class="i-bar" style="left:'+pct(gd,mx)+';width:'+pct(IND,mx)+'">'+IND+'d</div></div></div>';
+
+  var gc=has?(gd>0?'#ef4444':'#22c55e'):'#22d3ee';
+  h+='<div class="prog-row"><div class="prog-sp"></div><div class="prog-tr"><div class="prog-f" style="width:'+pct(tot,mx)+';background:linear-gradient(90deg,'+gc+' 0%,#0891b2 100%)"></div></div></div>';
+
+  tl.innerHTML=h;
+
+  // Toggles — EEZ hidden until second fault fires
+  var tg=document.getElementById('toggles'),th='';
+  for(var i=0;i<PROCS.length;i++){
+    var p=PROCS[i],isP=p.id==='permit',isEEZ=p.id==='transit_cl';
+    if(isEEZ&&!fault2)continue;
+    var on=isP?(permitSt>0):!!active[p.id];
+    var cls='tog';
+    if(isP&&permitSt===2)cls+=' reduced';
+    else if(on)cls+=' on';
+    var d=isP?pDays():getDays(p);
+    var showAdj=on&&!(isP&&permitSt>=3);
+    if(showAdj)cls+=' has-adj';
+    var ex='';
+    if(on)ex=' <span style="font-size:12px;opacity:.7">'+d+'d</span>';
+    th+='<div class="tog-wrap" style="--c:'+p.color+'">';
+    th+='<button class="'+cls+'" style="--c:'+p.color+'" onclick="toggle(\''+p.id+'\')">'+p.label+ex+'</button>';
+    if(showAdj)th+='<div class="day-adj"><button onclick="adjDays(\''+p.id+'\',1,event)">▲</button><button onclick="adjDays(\''+p.id+'\',-1,event)">▼</button></div>';
+    th+='</div>';
+  }
+  tg.innerHTML=th;
+
+  // Actions — second fault appears once the four Scenario 1 barriers are on
+  var ac=document.getElementById('actions'),ah='';
+  if(allFourOn()||fault2)ah+='<button class="act'+(fault2?' fired':'')+'" id="fault-btn" onclick="fireFault()"'+(fault2?' disabled':'')+'>\u26A1 Second fault</button>';
+  if(permitSt===2)ah+='<button id="magic-btn" onclick="preClear()">\u2726</button>';
+  ah+='<button class="act" id="reset-btn" onclick="reset()">Reset</button>';
+  ac.innerHTML=ah;
+}
+
+// Legend
+(function(){
+  var g=document.getElementById('leg-grid'),h='';
+  for(var i=0;i<PROCS.length;i++){
+    var p=PROCS[i];
+    h+='<div class="leg-card"><div class="leg-head"><span class="leg-dot" style="background:'+p.color+'"></span><span class="leg-name" style="color:'+p.color+'">'+p.label+'</span><span class="leg-meta">Sit.'+p.sit+(p.id==='permit'?' \u00B7 30\u21927\u21920d':' \u00B7 +'+p.days+'d')+'</span></div><div class="leg-detail">'+p.detail+'</div><div class="leg-gl"><em>Guideline: </em><span>'+p.guideline+'</span> <small>('+p.ref+')</small></div></div>';
+  }
+  g.innerHTML=h;
+})();
+render();
+</script>
+</html>

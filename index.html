@@ -1,24 +1,47 @@
 <html>
-<head><meta charset="UTF-8"></head>
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+</head>
 
 <style>
 *{margin:0;padding:0;box-sizing:border-box}
-html,body{height:100vh;overflow:hidden;background:#0f172a;font-family:'Segoe UI',system-ui,-apple-system,sans-serif;color:#e2e8f0}
-#app{height:100vh;display:flex;flex-direction:column;padding:20px 48px 16px;max-width:1200px;margin:0 auto}
+html{scroll-behavior:smooth;scroll-snap-type:y mandatory}
+body{background:#f8fafc;font-family:'Segoe UI',system-ui,-apple-system,sans-serif;color:#334155}
 
-h1{font-size:38px;font-weight:800;color:#f8fafc;text-align:center;letter-spacing:-1px}
-.sub{font-size:18px;color:#94a3b8;text-align:center;margin:4px 0 16px}
+/* --- Hamburger nav --- */
+.nav-toggle{position:fixed;top:16px;left:16px;z-index:200;width:44px;height:44px;border-radius:10px;background:rgba(255,255,255,.9);backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px);border:1px solid #cbd5e1;cursor:pointer;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:5px}
+.nav-toggle span{display:block;width:22px;height:2px;background:#64748b;border-radius:2px;transition:all .3s}
+.nav-toggle.open span:nth-child(1){transform:rotate(45deg) translate(5px,5px)}
+.nav-toggle.open span:nth-child(2){opacity:0}
+.nav-toggle.open span:nth-child(3){transform:rotate(-45deg) translate(5px,-5px)}
+
+.nav-panel{position:fixed;top:0;left:0;width:280px;height:100vh;background:rgba(255,255,255,.97);backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);border-right:1px solid #e2e8f0;z-index:190;transform:translateX(-100%);transition:transform .3s ease;padding:80px 24px 24px;display:flex;flex-direction:column;gap:4px}
+.nav-panel.open{transform:translateX(0)}
+.nav-overlay{position:fixed;inset:0;background:rgba(0,0,0,.15);z-index:180;opacity:0;pointer-events:none;transition:opacity .3s}
+.nav-overlay.open{opacity:1;pointer-events:auto}
+.nav-link{display:block;padding:14px 16px;border-radius:8px;color:#64748b;text-decoration:none;font-size:16px;font-weight:600;transition:all .2s}
+.nav-link:hover,.nav-link.active{color:#0f172a;background:#f1f5f9}
+
+/* --- Sections --- */
+.section{min-height:100vh;scroll-snap-align:start;display:flex;flex-direction:column}
+
+/* --- Timeline section --- */
+#app{flex:1;display:flex;flex-direction:column;padding:20px 48px 16px;max-width:1200px;margin:0 auto;width:100%}
+
+h1{font-size:38px;font-weight:800;color:#0f172a;text-align:center;letter-spacing:-1px}
+.sub{font-size:18px;color:#64748b;text-align:center;margin:4px 0 16px}
 
 .stats{display:flex;justify-content:center;gap:48px;margin-bottom:16px}
-.stat{text-align:center;min-width:140px}
-.stat-label{font-size:13px;color:#64748b;text-transform:uppercase;letter-spacing:1.5px;font-weight:600;margin-bottom:2px}
+.stat{text-align:center;min-width:100px}
+.stat-label{font-size:13px;color:#94a3b8;text-transform:uppercase;letter-spacing:1.5px;font-weight:600;margin-bottom:2px}
 .stat-val{font-size:48px;font-weight:800;line-height:1;transition:color .3s}
 .stat-unit{font-size:16px;opacity:.7;font-weight:500}
 
 #banner{border-radius:10px;padding:10px 20px;text-align:center;transition:all .4s;min-height:44px;display:flex;align-items:center;justify-content:center;margin-bottom:12px}
 #banner:empty{background:transparent;border:2px solid transparent}
 #banner.exposure{background:rgba(245,158,11,.08);border:2px solid rgba(245,158,11,.4)}
-#banner.outage{background:rgba(239,68,68,.18);border:2px solid #ef4444}
+#banner.outage{background:rgba(239,68,68,.06);border:2px solid #ef4444}
 .b-title{font-size:18px;font-weight:700;margin-bottom:2px}
 .b-text{font-size:15px;font-weight:500}
 
@@ -27,74 +50,210 @@ h1{font-size:38px;font-weight:800;color:#f8fafc;text-align:center;letter-spacing
 .axis{display:flex;height:18px;flex-shrink:0}
 .ax-sp{width:200px;flex-shrink:0}
 .ax-t{flex:1;position:relative}
-.ax-tick{position:absolute;transform:translateX(-50%);font-size:12px;color:#475569;font-weight:500}
+.ax-tick{position:absolute;transform:translateX(-50%);font-size:12px;color:#94a3b8;font-weight:500}
 .ax-line{display:flex;height:1px;margin-bottom:6px;flex-shrink:0}
 .ax-line-sp{width:200px;flex-shrink:0}
-.ax-line-r{flex:1;background:#334155}
+.ax-line-r{flex:1;background:#cbd5e1}
 
 .sec-h{display:flex;height:16px;flex-shrink:0;margin-bottom:3px}
 .sec-sp{width:200px;flex-shrink:0}
-.sec-t{font-size:11px;color:#64748b;text-transform:uppercase;letter-spacing:1px;font-weight:600}
+.sec-t{font-size:11px;color:#94a3b8;text-transform:uppercase;letter-spacing:1px;font-weight:600}
 
 .g-row{display:flex;align-items:center;height:34px;margin-bottom:3px;flex-shrink:0}
 .g-row.empty{visibility:hidden}
-.g-lbl{width:200px;flex-shrink:0;font-size:15px;font-weight:600;color:#cbd5e1;text-align:right;padding-right:14px;white-space:nowrap}
+.g-lbl{width:200px;flex-shrink:0;font-size:15px;font-weight:600;color:#475569;text-align:right;padding-right:14px;white-space:nowrap}
 .g-track{flex:1;position:relative;height:100%}
 .g-bar{position:absolute;height:100%;border-radius:5px;display:flex;align-items:center;justify-content:center;font-size:14px;font-weight:700;color:#fff;transition:left .5s cubic-bezier(.4,0,.2,1),width .5s cubic-bezier(.4,0,.2,1);min-width:20px}
 
 .div-row{display:flex;height:1px;margin:4px 0;flex-shrink:0}
 .div-sp{width:200px;flex-shrink:0}
-.div-l{flex:1;background:#1e293b}
+.div-l{flex:1;background:#e2e8f0}
 
 .i-row{display:flex;align-items:center;height:38px;flex-shrink:0;margin-bottom:3px}
-.i-lbl{width:200px;flex-shrink:0;font-size:15px;font-weight:600;color:#cbd5e1;text-align:right;padding-right:14px}
+.i-lbl{width:200px;flex-shrink:0;font-size:15px;font-weight:600;color:#475569;text-align:right;padding-right:14px}
 .i-track{flex:1;position:relative;height:100%}
 .i-bar{position:absolute;height:100%;border-radius:5px;display:flex;align-items:center;justify-content:center;font-size:14px;font-weight:700;color:#fff;transition:left .5s cubic-bezier(.4,0,.2,1),width .5s cubic-bezier(.4,0,.2,1);background:linear-gradient(90deg,#0891b2,#155e75)}
 
 .prog-row{display:flex;align-items:center;margin-top:4px;flex-shrink:0}
 .prog-sp{width:200px;flex-shrink:0}
-.prog-tr{flex:1;height:7px;background:#1e293b;border-radius:4px;position:relative}
+.prog-tr{flex:1;height:7px;background:#e2e8f0;border-radius:4px;position:relative}
 .prog-f{position:absolute;left:0;height:100%;border-radius:4px;transition:width .5s,background .5s}
 
 .ctrls{flex-shrink:0;padding-top:14px}
 .tog-row{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:10px;justify-content:center}
 .tog-wrap{display:inline-flex;align-items:center;gap:0;position:relative}
-.tog{padding:10px 18px;border-radius:8px;border:2px solid #334155;background:transparent;color:#64748b;font-size:15px;font-weight:600;cursor:pointer;transition:all .25s;font-family:inherit;min-width:110px}
-.tog.on{border-color:var(--c);color:var(--c);background:color-mix(in srgb,var(--c) 12%,transparent)}
-.tog.reduced{border-color:var(--c);color:var(--c);background:color-mix(in srgb,var(--c) 6%,transparent);border-style:dashed}
+.tog{padding:10px 18px;border-radius:8px;border:2px solid #cbd5e1;background:transparent;color:#94a3b8;font-size:15px;font-weight:600;cursor:pointer;transition:all .25s;font-family:inherit;min-width:110px}
+.tog.on{border-color:var(--c);color:var(--c);background:color-mix(in srgb,var(--c) 10%,transparent)}
+.tog.reduced{border-color:var(--c);color:var(--c);background:color-mix(in srgb,var(--c) 5%,transparent);border-style:dashed}
 .tog.has-adj{border-radius:8px 0 0 8px;border-right:none}
-.day-adj{display:flex;flex-direction:column;border:2px solid var(--c);border-left:1px solid color-mix(in srgb,var(--c) 30%,transparent);border-radius:0 8px 8px 0;overflow:hidden;background:color-mix(in srgb,var(--c) 6%,transparent)}
+.day-adj{display:flex;flex-direction:column;border:2px solid var(--c);border-left:1px solid color-mix(in srgb,var(--c) 30%,transparent);border-radius:0 8px 8px 0;overflow:hidden;background:color-mix(in srgb,var(--c) 5%,transparent)}
 .day-adj button{width:28px;height:18px;border:none;background:transparent;color:var(--c);font-size:13px;font-weight:700;cursor:pointer;font-family:inherit;display:flex;align-items:center;justify-content:center;padding:0;line-height:1}
-.day-adj button:hover{background:color-mix(in srgb,var(--c) 20%,transparent)}
+.day-adj button:hover{background:color-mix(in srgb,var(--c) 15%,transparent)}
 .day-adj button:first-child{border-bottom:1px solid color-mix(in srgb,var(--c) 20%,transparent)}
 .act-row{display:flex;gap:10px;justify-content:center;flex-wrap:wrap}
 .act{padding:10px 22px;border-radius:8px;border:none;font-size:15px;font-weight:700;cursor:pointer;font-family:inherit}
 #fault-btn{background:#dc2626;color:#fff}
-#fault-btn.fired{background:#7f1d1d;opacity:.5;cursor:default}
-#reset-btn{background:transparent;border:2px solid #334155;color:#64748b;font-weight:500}
-#magic-btn{width:36px;height:36px;border-radius:8px;background:#1e293b;border:2px solid #334155;color:#475569;font-size:16px;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:all .25s}
-#magic-btn:hover{border-color:#22c55e;color:#22c55e;background:rgba(34,197,94,.1)}
+#fault-btn.fired{background:#fca5a5;opacity:.5;cursor:default}
+#reset-btn{background:transparent;border:2px solid #cbd5e1;color:#94a3b8;font-weight:500}
+#magic-btn{width:36px;height:36px;border-radius:8px;background:#f1f5f9;border:2px solid #cbd5e1;color:#64748b;font-size:16px;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:all .25s}
+#magic-btn:hover{border-color:#22c55e;color:#22c55e;background:rgba(34,197,94,.08)}
 
 /* Legend overlay */
-#leg-toggle{position:fixed;bottom:12px;right:12px;width:32px;height:32px;border-radius:6px;background:#1e293b;border:1px solid #334155;color:#475569;font-size:14px;cursor:pointer;display:flex;align-items:center;justify-content:center;z-index:100;font-family:inherit}
-#leg-toggle:hover{color:#94a3b8;border-color:#475569}
-#legend-panel{position:fixed;bottom:0;right:0;width:680px;max-height:50vh;overflow-y:auto;background:#0f172a;border:1px solid #334155;border-radius:12px 0 0 0;padding:16px 20px;z-index:99;display:none;box-shadow:0 -4px 20px rgba(0,0,0,.5)}
+#leg-toggle{position:fixed;bottom:12px;right:12px;width:32px;height:32px;border-radius:6px;background:#fff;border:1px solid #cbd5e1;color:#64748b;font-size:14px;cursor:pointer;display:flex;align-items:center;justify-content:center;z-index:100;font-family:inherit}
+#leg-toggle:hover{color:#334155;border-color:#94a3b8}
+#legend-panel{position:fixed;bottom:0;right:0;width:680px;max-height:50vh;overflow-y:auto;background:#fff;border:1px solid #cbd5e1;border-radius:12px 0 0 0;padding:16px 20px;z-index:99;display:none;box-shadow:0 -4px 20px rgba(0,0,0,.08)}
 #legend-panel.open{display:block}
-.legend-t{font-size:11px;color:#475569;text-transform:uppercase;letter-spacing:1px;font-weight:600;margin-bottom:8px}
+.legend-t{font-size:11px;color:#94a3b8;text-transform:uppercase;letter-spacing:1px;font-weight:600;margin-bottom:8px}
 .leg-grid{display:grid;grid-template-columns:1fr 1fr;gap:6px}
-.leg-card{background:#0f172a;border:1px solid #1e293b;border-radius:6px;padding:6px 10px}
+.leg-card{background:#f8fafc;border:1px solid #e2e8f0;border-radius:6px;padding:6px 10px}
 .leg-head{display:flex;align-items:center;gap:6px;margin-bottom:2px}
 .leg-dot{width:8px;height:8px;border-radius:2px;flex-shrink:0}
 .leg-name{font-size:12px;font-weight:600}
-.leg-meta{font-size:10px;color:#475569;margin-left:auto}
-.leg-detail{font-size:10px;color:#94a3b8;margin-bottom:2px}
+.leg-meta{font-size:10px;color:#94a3b8;margin-left:auto}
+.leg-detail{font-size:10px;color:#64748b;margin-bottom:2px}
 .leg-gl{font-size:10px}
-.leg-gl em{color:#22c55e;font-weight:600;font-style:normal}
-.leg-gl span{color:#cbd5e1}
-.leg-gl small{color:#475569}
-.leg-foot{font-size:10px;color:#475569;margin-top:8px;line-height:1.5}
+.leg-gl em{color:#059669;font-weight:600;font-style:normal}
+.leg-gl span{color:#334155}
+.leg-gl small{color:#94a3b8}
+.leg-foot{font-size:10px;color:#64748b;margin-top:8px;line-height:1.5}
+
+/* --- Scenario content sections --- */
+.sc-page{flex:1;display:flex;flex-direction:column;padding:48px 48px 32px;max-width:1200px;margin:0 auto;width:100%}
+.sc-page h2{font-size:32px;font-weight:800;color:#0f172a;margin-bottom:16px}
+.sc-top{display:flex;gap:32px;flex:1;min-height:0}
+.sc-map{flex:1;min-width:0;display:flex;align-items:center;justify-content:center}
+.sc-map svg{width:100%;height:auto;border-radius:10px;box-shadow:0 2px 12px rgba(0,0,0,.1)}
+.sc-text{flex:1;min-width:0;display:flex;flex-direction:column;justify-content:center;gap:12px}
+.sc-role{font-size:15px;color:#64748b;line-height:1.6;border-left:3px solid #cbd5e1;padding-left:14px}
+.sc-narrative{font-size:16px;color:#475569;line-height:1.7}
+.sc-narrative strong{color:#0f172a}
+.sc-barrier{padding:10px 14px;border-radius:8px;border-left:3px solid;background:#f1f5f9}
+.sc-barrier-title{font-size:14px;font-weight:700;margin-bottom:2px}
+.sc-barrier-detail{font-size:13px;color:#64748b;line-height:1.5}
+
+/* Question screens */
+.q-page{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:48px;text-align:center}
+.q-label{font-size:14px;font-weight:700;text-transform:uppercase;letter-spacing:2px;margin-bottom:16px}
+.q-text{font-size:34px;font-weight:800;color:#0f172a;line-height:1.3;max-width:900px}
+
+/* Outage banner for scenario 1.5 */
+.sc-outage{background:rgba(239,68,68,.06);border:2px solid #ef4444;border-radius:10px;padding:12px 20px;text-align:center;margin-bottom:16px}
+.sc-outage-title{font-size:18px;font-weight:700;color:#dc2626}
+.sc-outage-text{font-size:15px;color:#dc2626;font-weight:500}
+
+
+/* Q3 sub-questions */
+.q3-list{text-align:left;max-width:800px;margin-top:32px}
+.q3-item{font-size:20px;color:#334155;line-height:1.6;padding:10px 0;border-bottom:1px solid #e2e8f0}
+.q3-item:last-child{border-bottom:none}
+
+/* Delay pills under questions */
+.q-delays{display:flex;flex-wrap:wrap;gap:8px;justify-content:flex-start;margin:28px auto 0;max-width:700px}
+.q-delay{padding:6px 14px;border-radius:6px;font-size:13px;font-weight:600;border:1px solid;background:#f1f5f9}
+
+/* Discrete back-to-timeline link */
+.back-link{position:absolute;bottom:20px;right:28px;font-size:13px;color:#94a3b8;text-decoration:none;font-weight:500;transition:color .2s}
+.back-link:hover{color:#475569}
+
+/* Combined Q1+Q2 screen */
+.combo-page{flex:1;display:flex;flex-direction:column;padding:48px;max-width:1100px;margin:0 auto;width:100%;position:relative}
+.combo-page h2{font-size:26px;font-weight:800;color:#0f172a;text-align:center;margin-bottom:24px}
+.combo-grid{display:flex;gap:32px;flex:1;min-height:0;align-items:center}
+.combo-col{flex:1;min-width:0}
+.combo-col h3{font-size:18px;font-weight:700;margin-bottom:12px}
+.combo-q{font-size:16px;font-weight:700;color:#0f172a;margin-bottom:12px;line-height:1.4}
+.combo-delays{display:flex;flex-direction:column;gap:6px}
+.combo-delay{padding:6px 12px;border-radius:6px;font-size:13px;font-weight:600;border:1px solid;background:#f1f5f9}
+.combo-divider{width:1px;background:#e2e8f0;align-self:stretch;flex-shrink:0}
+
+/* --- Responsive --- */
+@media(max-width:900px){
+  #app{padding:16px 24px 12px}
+  .ax-sp,.ax-line-sp,.sec-sp,.g-lbl,.i-lbl,.prog-sp,.div-sp{width:130px}
+  .stats{gap:24px}
+  .stat-val{font-size:36px}
+  h1{font-size:30px}
+  #legend-panel{width:100%;border-radius:12px 12px 0 0}
+  .leg-grid{grid-template-columns:1fr}
+  .sc-page{padding:32px 24px 20px}
+  .sc-top{flex-direction:column;gap:20px}
+  .q-text{font-size:26px}
+  .q-page{padding:32px 24px}
+  .combo-page{padding:32px 24px}
+  .combo-grid{flex-direction:column;gap:24px}
+}
+
+@media(max-width:600px){
+  #app{padding:12px 12px 10px}
+  h1{font-size:22px}
+  .sub{font-size:14px;margin:2px 0 10px}
+  .stats{gap:12px;margin-bottom:10px}
+  .stat{min-width:0}
+  .stat-label{font-size:10px;letter-spacing:1px}
+  .stat-val{font-size:28px}
+  .stat-unit{font-size:13px}
+  .ax-sp,.ax-line-sp,.sec-sp,.g-lbl,.i-lbl,.prog-sp,.div-sp{width:90px}
+  .g-lbl,.i-lbl{font-size:12px;padding-right:8px}
+  .g-bar,.i-bar{font-size:11px}
+  .ax-tick{font-size:10px}
+  .sec-t{font-size:9px}
+  .tog{padding:8px 12px;font-size:13px;min-width:0}
+  .day-adj button{width:24px;height:16px;font-size:11px}
+  .act{padding:8px 16px;font-size:13px}
+  #banner{padding:8px 12px}
+  .b-title{font-size:14px}
+  .b-text{font-size:13px}
+  #legend-panel{width:100%;border-radius:12px 12px 0 0;padding:12px 14px}
+  .leg-grid{grid-template-columns:1fr}
+  .sc-page{padding:20px 14px 14px}
+  .sc-page h2{font-size:24px}
+  .sc-narrative{font-size:14px}
+  .sc-barrier{padding:8px 10px}
+  .sc-barrier-title{font-size:13px}
+  .sc-barrier-detail{font-size:12px}
+  .q-page{padding:24px 16px}
+  .q-text{font-size:20px}
+  .q-label{font-size:12px}
+  .combo-page{padding:20px 14px}
+  .combo-page h2{font-size:20px}
+  .combo-q{font-size:14px}
+  .q-delays{gap:6px;margin-top:20px}
+  .q-delay{font-size:11px;padding:4px 10px}
+  .q3-item{font-size:16px}
+}
+
+@media(max-width:380px){
+  .ax-sp,.ax-line-sp,.sec-sp,.g-lbl,.i-lbl,.prog-sp,.div-sp{width:70px}
+  .g-lbl,.i-lbl{font-size:11px;padding-right:6px}
+  .stats{flex-direction:column;gap:6px;align-items:center}
+  .tog{padding:7px 10px;font-size:12px}
+  h1{font-size:19px}
+}
+
+@media print{
+  html{scroll-snap-type:none}
+  .section{min-height:auto;page-break-inside:avoid;scroll-snap-align:none}
+  .nav-toggle,.nav-panel,.nav-overlay,#leg-toggle,#legend-panel{display:none!important}
+  .sc-map svg{box-shadow:none;border:1px solid #cbd5e1}
+}
 </style>
 
+<!-- Hamburger nav -->
+<button class="nav-toggle" id="nav-toggle" onclick="toggleNav()">
+  <span></span><span></span><span></span>
+</button>
+<div class="nav-overlay" id="nav-overlay" onclick="closeNav()"></div>
+<nav class="nav-panel" id="nav-panel">
+  <a class="nav-link" href="#timeline" onclick="closeNav()">Timeline</a>
+  <a class="nav-link" href="#scenario1" onclick="closeNav()">Scenario 1</a>
+  <a class="nav-link" href="#question1" onclick="closeNav()">Question 1</a>
+  <a class="nav-link" href="#scenario15" onclick="closeNav()">Scenario 1.5</a>
+  <a class="nav-link" href="#combo" onclick="closeNav()">Discussion</a>
+  <a class="nav-link" href="#question3" onclick="closeNav()">Question 3</a>
+</nav>
+
+<!-- Section 1: Timeline -->
+<div class="section" id="timeline">
 <div id="app">
   <h1>The Repair Timeline</h1>
   <p class="sub"></p>
@@ -102,27 +261,169 @@ h1{font-size:38px;font-weight:800;color:#f8fafc;text-align:center;letter-spacing
   <div class="stats">
     <div class="stat">
       <div class="stat-label">Industry</div>
-      <div class="stat-val" style="color:#22d3ee">11</div>
-      <div class="stat-unit" style="color:#22d3ee">days</div>
+      <div class="stat-val" style="color:#0891b2">11</div>
+      <div class="stat-unit" style="color:#0891b2">days</div>
     </div>
     <div class="stat">
       <div class="stat-label">Government</div>
-      <div class="stat-val" id="s-gov" style="color:#475569">—</div>
+      <div class="stat-val" id="s-gov" style="color:#94a3b8">&mdash;</div>
       <div class="stat-unit" id="s-gov-u"></div>
     </div>
     <div class="stat">
       <div class="stat-label">Total to repair</div>
-      <div class="stat-val" id="s-tot" style="color:#f8fafc">11</div>
-      <div class="stat-unit" style="color:#f8fafc">days</div>
+      <div class="stat-val" id="s-tot" style="color:#0f172a">11</div>
+      <div class="stat-unit" style="color:#0f172a">days</div>
     </div>
   </div>
 
   <div id="banner"></div>
-  <div class="tl" id="timeline"></div>
+  <div class="tl" id="tl-area"></div>
 
   <div class="ctrls">
     <div class="tog-row" id="toggles"></div>
     <div class="act-row" id="actions"></div>
+  </div>
+</div>
+</div>
+
+<!-- Section 2: Scenario 1 -->
+<div class="section" id="scenario1">
+<div class="sc-page">
+  <h2>Scenario 1</h2>
+  <div class="sc-top">
+    <div class="sc-map">
+      <svg viewBox="0 0 1280 720" xmlns="http://www.w3.org/2000/svg" font-family="'Segoe UI',system-ui,sans-serif"><defs><filter height="220%" width="220%" y="-60%" x="-60%" id="g1"><feGaussianBlur result="b" stdDeviation="3"/></filter></defs><g><path d="m0,0l1280,0l0,720l-1280,0l0,-720z" fill="#0f172a"/><g stroke="#1e293b"><line y2="180" x2="1280" y1="180" x1="0"/><line y2="360" x2="1280" y1="360" x1="0"/><line y2="540" x2="1280" y1="540" x1="0"/><line y2="720" x2="320" y1="0" x1="320"/><line y2="720" x2="640" y1="0" x1="640"/><line y2="720" x2="960" y1="0" x1="960"/></g><path opacity="0.5" fill="#1e293b" d="m470,0c10,80 20,140 5,200c-15,60 -35,100 -45,140c-20,20 -40,30 -50,40c10,20 30,40 45,70c15,40 30,90 40,150c15,60 25,90 35,120l780,0l0,-720l-810,0z"/><path opacity="0.6" fill="#1e293b" d="m859,0c10,80 20,140 5,200c-15,60 -35,100 -45,140c-20,20 -40,30 -50,40c10,20 30,40 45,70c15,40 30,90 40,150c15,60 25,90 35,120l390,0l0,-720l-420,0z"/><path stroke-width="2.5" stroke="#64748b" fill="#3b4a5f" d="m1000,0c10,80 20,140 5,200c-15,60 -35,100 -45,140c-20,20 -40,30 -50,40c10,20 30,40 45,70c15,40 30,90 40,150c15,60 25,90 35,120l250,0l0,-720l-280,0z"/><text text-anchor="middle" font-weight="700" font-size="28" fill="#f8fafc" y="360" x="1120">COUNTRY A</text><path stroke-width="2" stroke="#64748b" fill="#1e293b" d="m955,368c20,-3 30,2 30,12c0,10 -10,15 -30,12"/><rect fill="#94a3b8" rx="1" height="4" width="22" y="370" x="960"/><rect fill="#94a3b8" rx="1" height="4" width="22" y="380" x="960"/><text font-weight="600" font-size="15" fill="#e2e8f0" y="380" x="1002">PORT</text><path stroke-dasharray="10 8" stroke-width="2" stroke="#94a3b8" fill="none" d="m470,0c10,80 20,140 5,200c-15,60 -35,100 -45,140c-20,20 -40,30 -50,40c10,20 30,40 45,70c15,40 30,90 40,150c15,60 25,90 35,120"/><path stroke-dasharray="6 6" stroke-width="2" stroke="#94a3b8" fill="none" d="m860,0c10,80 20,140 5,200c-15,60 -35,100 -45,140c-20,20 -40,30 -50,40c10,20 30,40 45,70c15,40 30,90 40,150c15,60 25,90 35,120"/><line stroke="#475569" y2="56" x2="842" y1="56" x1="488"/><line stroke="#475569" y2="60" x2="488" y1="52" x1="488"/><line stroke="#475569" y2="60" x2="842" y1="52" x1="842"/><line stroke="#475569" y2="56" x2="990" y1="56" x1="870"/><line stroke="#475569" y2="60" x2="870" y1="52" x1="870"/><line stroke="#475569" y2="60" x2="990" y1="52" x1="990"/><path filter="url(#g1)" stroke-linecap="round" stroke-width="3" stroke="#22d3ee" fill="none" d="m0,240c200,10 600,20 990,30"/><g stroke-linecap="round" stroke-width="4" stroke="#ef4444"><line y2="275" x2="923" y1="257" x1="905"/><line y2="257" x2="923" y1="275" x1="905"/></g><text text-anchor="middle" font-weight="600" font-size="20" fill="#fca5a5" y="200" x="929">Cable Fault</text><text text-anchor="middle" font-size="12" fill="#94a3b8" y="302" x="900">(in territorial sea)</text><path filter="url(#g1)" stroke-linecap="round" stroke-width="3" stroke="#22d3ee" fill="none" d="m0,520c200,-10 600,-20 975,-40"/><g><rect fill="#94a3b8" height="12" width="3" y="394" x="202"/><rect fill="#cbd5e1" height="14" width="22" y="398" x="192"/><path fill="#e2e8f0" d="m176,412l58,0l-10,16l-38,0l-10,-16z"/></g><text text-anchor="middle" font-weight="600" font-size="20" fill="#e2e8f0" y="457" x="211">CS RepairShip</text><g fill="#cbd5e1" font-size="13"><rect stroke="#334155" fill="#1e293b" rx="6" height="48" width="620" y="614" x="640"/><line stroke-width="3" stroke="#22d3ee" y2="638" x2="696" y1="638" x1="660"/><text y="643" x="704">Submarine cable</text><g stroke-linecap="round" stroke-width="3" stroke="#ef4444"><line y2="644" x2="848" y1="632" x1="836"/><line y2="632" x2="848" y1="644" x1="836"/></g><text y="643" x="858">Cable fault</text><line stroke-dasharray="6 6" stroke-width="2" stroke="#94a3b8" y2="638" x2="992" y1="638" x1="956"/><text y="643" x="1000">Maritime boundary</text><path fill="#e2e8f0" d="m1140,632l32,0l-5,10l-22,0l-5,-10z"/><text y="643" x="1182">Vessel</text></g><circle fill="#ef4444" r="15" cy="228" cx="925"/><text text-anchor="middle" font-weight="700" font-size="16" fill="#fff" y="234" x="925">1</text></g></svg>
+    </div>
+    <div class="sc-text">
+      <div class="sc-role">You are the <strong>National Coordination Forum</strong> of Country A (the regulators, the cable owners, and the operator).</div>
+      <div class="sc-narrative">Country A's submarine cable has been <strong>cut within its territorial sea</strong> by a ship anchor. It's causing internet slowdowns for businesses and millions of everyday users. The CS RepairShip can perform the repair. It is flagged to Country Z.</div>
+      <div class="sc-narrative">The CS RepairShip can be ready to sail within 24 hours, but the repair ship operator <strong>will not mobilise until they know they are able to get to the repair site</strong>, fearful of legal penalties or military interception.</div>
+      <div class="combo-delays">
+        <div class="sc-barrier" style="border-color:#f59e0b">
+          <div class="sc-barrier-title" style="color:#b45309">a) Agency ping-pong &mdash; 3 days</div>
+          <div class="sc-barrier-detail">The operator tries to work out which government ministry is responsible. They get passed around through 4 ministries.</div>
+        </div>
+        <div class="sc-barrier" style="border-color:#ef4444">
+          <div class="sc-barrier-title" style="color:#dc2626">b) Foreign ship in domestic waters &mdash; 7 days</div>
+          <div class="sc-barrier-detail">Cable repair falls under cabotage laws. The ship is foreign-flagged. Country A's laws restrict foreign ships and crew from working in domestic waters.</div>
+        </div>
+        <div class="sc-barrier" style="border-color:#ef4444">
+          <div class="sc-barrier-title" style="color:#dc2626">c) Equipment import duties &mdash; 5 days</div>
+          <div class="sc-barrier-detail">Country A treats spare cables and repeaters as standard commercial imports. Equipment held at port while duties are assessed.</div>
+        </div>
+        <div class="sc-barrier" style="border-color:#a855f7">
+          <div class="sc-barrier-title" style="color:#7c3aed">d) Long processing times &mdash; 30 days</div>
+          <div class="sc-barrier-detail">Applications for environmental, spatial, maritime, and security permits. Some are sequential, managed by different departments.</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+</div>
+
+<!-- Section 3: Question 1 -->
+<div class="section" id="question1">
+  <div class="q-page" style="position:relative">
+    <div class="q-label" style="color:#0891b2">Question 1</div>
+    <div class="q-text">How would you make the processes faster and more streamlined for the next fault so the repair ship can start fixing the fault sooner?</div>
+    <div class="q-delays">
+      <div class="sc-barrier" style="border-color:#f59e0b">
+        <div class="sc-barrier-title" style="color:#b45309">a) Agency ping-pong &mdash; 3 days</div>
+        <div class="sc-barrier-detail">The operator tries to work out which government ministry is responsible. They get passed around through 4 ministries.</div>
+      </div>
+      <div class="sc-barrier" style="border-color:#ef4444">
+        <div class="sc-barrier-title" style="color:#dc2626">b) Foreign ship in domestic waters &mdash; 7 days</div>
+        <div class="sc-barrier-detail">Cable repair falls under cabotage laws. The ship is foreign-flagged. Country A's laws restrict foreign ships and crew from working in domestic waters.</div>
+      </div>
+      <div class="sc-barrier" style="border-color:#ef4444">
+        <div class="sc-barrier-title" style="color:#dc2626">c) Equipment import duties &mdash; 5 days</div>
+        <div class="sc-barrier-detail">Country A treats spare cables and repeaters as standard commercial imports. Equipment held at port while duties are assessed.</div>
+      </div>
+      <div class="sc-barrier" style="border-color:#a855f7">
+        <div class="sc-barrier-title" style="color:#7c3aed">d) Long processing times &mdash; 30 days</div>
+        <div class="sc-barrier-detail">Applications for environmental, spatial, maritime, and security permits. Some are sequential, managed by different departments.</div>
+      </div>
+    </div>
+      <a href="#timeline" class="back-link">Timeline &rarr;</a>
+    </div>
+  </div>
+</div>
+
+<!-- Section 4: Scenario 1.5 -->
+<div class="section" id="scenario15">
+<div class="sc-page">
+  <h2>Scenario 1.5</h2>
+  <div class="sc-outage">
+    <div class="sc-outage-title">&#9888; SECOND FAULT &mdash; Network outage</div>
+    <div class="sc-outage-text">Estimated impact: <strong>200M per day</strong></div>
+  </div>
+  <div class="sc-top">
+    <div class="sc-map">
+      <svg viewBox="0 0 1280 720" xmlns="http://www.w3.org/2000/svg" font-family="'Segoe UI',system-ui,sans-serif"><defs><filter height="220%" width="220%" y="-60%" x="-60%" id="g2"><feGaussianBlur result="b" stdDeviation="3"/></filter><marker orient="auto" refY="3" refX="5" markerHeight="10" markerWidth="10" id="arrow"><path fill="#f59e0b" d="m0,0l6,3l-6,3l0,-6z"/></marker></defs><g><rect fill="#0f172a" height="720" width="1280"/><g stroke="#1e293b"><line y2="180" x2="1280" y1="180" x1="0"/><line y2="360" x2="1280" y1="360" x1="0"/><line y2="540" x2="1280" y1="540" x1="0"/><line y2="720" x2="320" y1="0" x1="320"/><line y2="720" x2="640" y1="0" x1="640"/><line y2="720" x2="960" y1="0" x1="960"/></g><path opacity="0.5" fill="#1e293b" d="m470,0c10,80 20,140 5,200c-15,60 -35,100 -45,140c-20,20 -40,30 -50,40c10,20 30,40 45,70c15,40 30,90 40,150c15,60 25,90 35,120l780,0l0,-720l-810,0z"/><path opacity="0.6" fill="#1e293b" d="m859,0c10,80 20,140 5,200c-15,60 -35,100 -45,140c-20,20 -40,30 -50,40c10,20 30,40 45,70c15,40 30,90 40,150c15,60 25,90 35,120l390,0l0,-720l-420,0z"/><path stroke-width="2.5" stroke="#64748b" fill="#3b4a5f" d="m1000,0c10,80 20,140 5,200c-15,60 -35,100 -45,140c-20,20 -40,30 -50,40c10,20 30,40 45,70c15,40 30,90 40,150c15,60 25,90 35,120l250,0l0,-720l-280,0z"/><text text-anchor="middle" font-weight="700" font-size="28" fill="#f8fafc" y="360" x="1120">COUNTRY A</text><path stroke-width="2" stroke="#64748b" fill="#1e293b" d="m955,368c20,-3 30,2 30,12c0,10 -10,15 -30,12"/><rect fill="#94a3b8" rx="1" height="4" width="22" y="370" x="960"/><rect fill="#94a3b8" rx="1" height="4" width="22" y="380" x="960"/><text font-weight="600" font-size="15" fill="#e2e8f0" y="380" x="1002">PORT</text><path stroke-dasharray="10 8" stroke-width="2" stroke="#94a3b8" fill="none" d="m470,0c10,80 20,140 5,200c-15,60 -35,100 -45,140c-20,20 -40,30 -50,40c10,20 30,40 45,70c15,40 30,90 40,150c15,60 25,90 35,120"/><path stroke-dasharray="6 6" stroke-width="2" stroke="#94a3b8" fill="none" d="m860,0c10,80 20,140 5,200c-15,60 -35,100 -45,140c-20,20 -40,30 -50,40c10,20 30,40 45,70c15,40 30,90 40,150c15,60 25,90 35,120"/><line stroke="#475569" y2="56" x2="842" y1="56" x1="488"/><line stroke="#475569" y2="60" x2="488" y1="52" x1="488"/><line stroke="#475569" y2="60" x2="842" y1="52" x1="842"/><line stroke="#475569" y2="56" x2="990" y1="56" x1="870"/><line stroke="#475569" y2="60" x2="870" y1="52" x1="870"/><line stroke="#475569" y2="60" x2="990" y1="52" x1="990"/><path filter="url(#g2)" stroke-linecap="round" stroke-width="3" stroke="#22d3ee" fill="none" d="m0,240c200,10 600,20 990,30"/><g stroke-linecap="round" stroke-width="4" stroke="#ef4444"><line y2="275" x2="923" y1="257" x1="905"/><line y2="257" x2="923" y1="275" x1="905"/></g><text text-anchor="middle" font-weight="600" font-size="20" fill="#fca5a5" y="200" x="929">Cable Fault</text><text text-anchor="middle" font-size="12" fill="#94a3b8" y="302" x="900">(in territorial sea)</text><path filter="url(#g2)" stroke-linecap="round" stroke-width="3" stroke="#22d3ee" fill="none" d="m0,520c200,-10 600,-20 975,-40"/><g stroke-linecap="round" stroke-width="4" stroke="#ef4444"><line y2="505" x2="665" y1="487" x1="647"/><line y2="487" x2="665" y1="505" x1="647"/></g><text text-anchor="middle" font-weight="600" font-size="20" fill="#fca5a5" y="470" x="622">Cable Fault</text><text text-anchor="middle" font-size="12" fill="#94a3b8" y="528" x="656">(in EEZ)</text><g><rect fill="#94a3b8" height="12" width="3" y="394" x="202"/><rect fill="#cbd5e1" height="14" width="22" y="398" x="192"/><path fill="#e2e8f0" d="m176,412l58,0l-10,16l-38,0l-10,-16z"/></g><text text-anchor="middle" font-weight="600" font-size="20" fill="#e2e8f0" y="457" x="211">CS RepairShip</text><path stroke="#f59e0b" marker-end="url(#arrow)" stroke-dasharray="4 8" stroke-width="2.5" fill="none" d="m292,449c151,-6 347,-32 480,-58c62,-13 116,-15 178,-15"/><g fill="#cbd5e1" font-size="13"><rect stroke="#334155" fill="#1e293b" rx="6" height="48" width="620" y="614" x="640"/><line stroke-width="3" stroke="#22d3ee" y2="638" x2="696" y1="638" x1="660"/><text y="643" x="704">Submarine cable</text><g stroke-linecap="round" stroke-width="3" stroke="#ef4444"><line y2="644" x2="848" y1="632" x1="836"/><line y2="632" x2="848" y1="644" x1="836"/></g><text y="643" x="858">Cable fault</text><line stroke-dasharray="6 6" stroke-width="2" stroke="#94a3b8" y2="638" x2="992" y1="638" x1="956"/><text y="643" x="1000">Maritime boundary</text><path fill="#e2e8f0" d="m1140,632l32,0l-5,10l-22,0l-5,-10z"/><text y="643" x="1182">Vessel</text></g><circle fill="#ef4444" r="15" cy="463" cx="704"/><text text-anchor="middle" font-weight="700" font-size="16" fill="#fff" y="469" x="704">2</text><circle fill="#ef4444" r="15" cy="228" cx="925"/><text text-anchor="middle" font-weight="700" font-size="16" fill="#fff" y="234" x="925">1</text></g></svg>
+    </div>
+    <div class="sc-text">
+      <div class="sc-narrative">A fishing trawler has just cut through Country A's <strong>second submarine cable</strong> in Country A's EEZ. Both cables are now down. The internet is practically unusable.</div>
+      <div class="sc-narrative">Keep going with Question 1. Additionally...</div>
+      <div class="sc-barrier" style="border-color:#ef4444">
+        <div class="sc-barrier-title" style="color:#dc2626">e) Customs duties, taxes, and fees for EEZ transit &mdash; 3 days</div>
+        <div class="sc-barrier-detail">Despite the fault being in the EEZ, Country A requires the vessel to make a detour and dock at port to clear immigration, pay port fees, and formally process the temporary importation of the subsea cable equipment spares. This adds 3 days in addition to the other processes in Question 1. Meanwhile the country continues to not have a usable internet.</div>
+      </div>
+    </div>
+  </div>
+</div>
+</div>
+
+<!-- Section 5: Combined Q1 + Q2 -->
+<div class="section" id="combo">
+<div class="combo-page">
+  <h2>Discussion</h2>
+  <div class="combo-grid">
+    <div class="combo-col">
+      <h3 style="color:#0891b2">Question 1</h3>
+      <div class="combo-q">How would you make the processes faster and more streamlined for the next fault so the repair ship can start fixing the fault sooner?</div>
+      <div class="combo-delays">
+        <div class="sc-barrier" style="border-color:#f59e0b">
+          <div class="sc-barrier-title" style="color:#b45309">a) Agency ping-pong &mdash; 3 days</div>
+          <div class="sc-barrier-detail">The operator tries to work out which government ministry is responsible. They get passed around through 4 ministries.</div>
+        </div>
+        <div class="sc-barrier" style="border-color:#ef4444">
+          <div class="sc-barrier-title" style="color:#dc2626">b) Foreign ship in domestic waters &mdash; 7 days</div>
+          <div class="sc-barrier-detail">Cable repair falls under cabotage laws. The ship is foreign-flagged. Country A's laws restrict foreign ships and crew from working in domestic waters.</div>
+        </div>
+        <div class="sc-barrier" style="border-color:#ef4444">
+          <div class="sc-barrier-title" style="color:#dc2626">c) Equipment import duties &mdash; 5 days</div>
+          <div class="sc-barrier-detail">Country A treats spare cables and repeaters as standard commercial imports. Equipment held at port while duties are assessed.</div>
+        </div>
+        <div class="sc-barrier" style="border-color:#a855f7">
+          <div class="sc-barrier-title" style="color:#7c3aed">d) Long processing times &mdash; 30 days</div>
+          <div class="sc-barrier-detail">Applications for environmental, spatial, maritime, and security permits. Some are sequential, managed by different departments.</div>
+        </div>
+      </div>
+    </div>
+    <div class="combo-divider"></div>
+    <div class="combo-col">
+      <h3 style="color:#dc2626">Question 2</h3>
+      <div class="combo-q">According to the Enhanced ASEAN Guidelines, how could we managed delays caused to faults in the EEZ that do not require a ship to enter territorial waters to repair the cable.</div>
+      <div class="sc-barrier" style="border-color:#ef4444">
+        <div class="sc-barrier-title" style="color:#dc2626">e) Customs duties, taxes, and fees for EEZ transit &mdash; 3 days</div>
+        <div class="sc-barrier-detail">Despite the fault being in the EEZ, Country A requires the vessel to make a detour and dock at port to clear immigration, pay port fees, and formally process the temporary importation of the subsea cable equipment spares. This adds 3 days in addition to the other processes in Question 1. Meanwhile the country continues to not have a usable internet.</div>
+      </div>
+    </div>
+  </div>
+</div>
+</div>
+
+<!-- Section 7: Question 3 -->
+<div class="section" id="question3">
+  <div class="q-page">
+    <div class="q-label" style="color:#7c3aed">Question 3</div>
+    <div class="q-text">Reflecting on your own country's experience&hellip;</div>
+    <div class="q3-list">
+      <div class="q3-item">1. Has your country adopted or tried to adopt any practices to streamline or expedite cable repairs? If so,</div>
+      <div class="q3-item">a) What were the key triggers that motivated change?</div>
+      <div class="q3-item">b) What challenges were faced and how were they overcome?</div>
+      <div class="q3-item">c) What challenges do you continue to face?</div>
+    </div>
   </div>
 </div>
 
@@ -131,20 +432,46 @@ h1{font-size:38px;font-weight:800;color:#f8fafc;text-align:center;letter-spacing
   <div class="legend-t">Facilitator reference</div>
   <div class="leg-grid" id="leg-grid"></div>
   <div class="leg-foot">
-    <b>Colour:</b> Amber=Sit.0 (point of contact) · Red=Sit.1 (can the ship move?) · Purple=Sit.2 (how fast?)<br>
+    <b>Colour:</b> Amber=Sit.0 (point of contact) &middot; Red=Sit.1 (can the ship move?) &middot; Purple=Sit.2 (how fast?)<br>
     <b>Cost:</b> $200M/day (NetBlocks COST, mid-tier ASEAN economy)<br>
-    <b>Permitting clicks:</b> 1st=30d → 2nd=7d → ✦ button=0d (pre-clearance reveal)<br>
-    <b>Flow:</b> Toggle the 4 Scenario&nbsp;1 barriers ON → ⚡ Second fault reveals the EEZ barrier (Sit.1.5) + outage banner → Exercise: toggle barriers OFF as participants remove them. Banner persists.
+    <b>Permitting clicks:</b> 1st=30d &rarr; 2nd=7d &rarr; &#10022; button=0d (pre-clearance reveal)<br>
+    <b>Flow:</b> Toggle the 4 Scenario&nbsp;1 barriers ON &rarr; &#9889; Second fault reveals the EEZ barrier (Sit.1.5) + outage banner &rarr; Exercise: toggle barriers OFF as participants remove them. Banner persists.
   </div>
 </div>
 
 <script>
+/* --- Nav --- */
+function toggleNav(){
+  document.getElementById('nav-toggle').classList.toggle('open');
+  document.getElementById('nav-panel').classList.toggle('open');
+  document.getElementById('nav-overlay').classList.toggle('open');
+}
+function closeNav(){
+  document.getElementById('nav-toggle').classList.remove('open');
+  document.getElementById('nav-panel').classList.remove('open');
+  document.getElementById('nav-overlay').classList.remove('open');
+}
+
+var navLinks=document.querySelectorAll('.nav-link');
+var sections=document.querySelectorAll('.section');
+var observer=new IntersectionObserver(function(entries){
+  entries.forEach(function(e){
+    if(e.isIntersecting){
+      navLinks.forEach(function(l){l.classList.remove('active')});
+      var link=document.querySelector('.nav-link[href="#'+e.target.id+'"]');
+      if(link)link.classList.add('active');
+    }
+  });
+},{threshold:0.3});
+sections.forEach(function(s){observer.observe(s)});
+
+/* --- Timeline logic --- */
 var PROCS=[
-  {id:'coord',label:'No lead agency',days:3,color:'#f59e0b',sit:0,detail:'No single point of contact — operator contacts 4 agencies separately',guideline:'Appoint a single coordinating agency',ref:'Principle 8(c), Annex D(i)'},
-  {id:'vessel',label:'Cabotage',days:7,color:'#ef4444',sit:1,detail:'Foreign-flagged ship blocked — cabotage waiver process',guideline:'Do not define cable repair as cabotage; no flag/crewing restrictions',ref:'Annex D(viii)–(ix)'},
-  {id:'trade',label:'Custom duties',days:5,color:'#ef4444',sit:1,detail:'Equipment held at port for customs duty assessment',guideline:'Exempt repair equipment from customs duties',ref:'Annex D(vi)–(vii)'},
-  {id:'permit',label:'Permitting',days:30,color:'#a855f7',sit:2,detail:'Multiple agencies — spatial zoning, security clearance, environmental review, underwater work permit — 30+ working days',guideline:'Annual pre-clearance of vessel & crew; 7–10 day target',ref:'Annex D(ii)–(iii)'},
-  {id:'transit_cl',label:'EEZ entry paperwork',days:3,color:'#ef4444',sit:1,detail:'Ship diverted to port for EEZ entry / temporary importation paperwork',guideline:'No port entry for ships repairing beyond territorial waters',ref:'Annex D(v),(vii)'}
+  {id:'coord',label:'No lead agency',days:3,color:'#d97706',sit:0,detail:'No single point of contact — operator contacts 4 agencies separately',guideline:'Appoint a single coordinating agency',ref:'Principle 8(c), Annex D(i)'},
+  {id:'vessel',label:'Cabotage',days:7,color:'#dc2626',sit:1,detail:'Foreign-flagged ship blocked — cabotage waiver process',guideline:'Do not define cable repair as cabotage; no flag/crewing restrictions',ref:'Annex D(viii)–(ix)'},
+  {id:'trade',label:'Custom duties',days:5,color:'#dc2626',sit:1,detail:'Equipment held at port for customs duty assessment',guideline:'Exempt repair equipment from customs duties',ref:'Annex D(vi)–(vii)'},
+  {id:'permit',label:'Permitting',days:30,color:'#7c3aed',sit:2,detail:'Multiple agencies — spatial zoning, security clearance, environmental review, underwater work permit — 30+ working days',guideline:'Annual pre-clearance of vessel & crew; 7–10 day target',ref:'Annex D(ii)–(iii)'},
+  {id:'transit_cl',label:'EEZ entry paperwork',days:3,color:'#dc2626',sit:1,detail:'Ship diverted to port for EEZ entry / temporary importation paperwork',guideline:'No port entry for ships repairing beyond territorial waters',ref:'Annex D(v),(vii)'}
 ];
 var IND=11,COST=200;
 var active={},permitSt=0,fault2=false,customDays={};
@@ -168,7 +495,6 @@ function adjDays(id,delta,e){
   customDays[id]=nv;
   render();
 }
-// "Any barrier active" — used for stat colouring
 function anyOn(){
   for(var i=0;i<PROCS.length;i++){
     var p=PROCS[i];
@@ -177,7 +503,6 @@ function anyOn(){
   }
   return false;
 }
-// The four Scenario 1 barriers are all on (EEZ excluded)
 function allFourOn(){
   return !!active['coord'] && !!active['vessel'] && !!active['trade'] && permitSt>=1;
 }
@@ -202,28 +527,25 @@ function pct(d,m){return(d/m*100)+'%'}
 function render(){
   var gd=gDays(),tot=IND+gd,has=anyOn(),mx=Math.max(tot+4,62);
 
-  // Stats
   var ge=document.getElementById('s-gov'),gu=document.getElementById('s-gov-u');
   ge.textContent=has?'+'+gd:'—';
-  ge.style.color=has?(gd===0?'#22c55e':'#ef4444'):'#475569';
+  ge.style.color=has?(gd===0?'#059669':'#dc2626'):'#94a3b8';
   gu.textContent=has?'days':'';gu.style.color=ge.style.color;
   document.getElementById('s-tot').textContent=tot;
 
-  // Banner — persists once the second fault has fired
   var b=document.getElementById('banner');
   if(fault2){
     b.className='outage';
-    b.innerHTML='<div><div class="b-title" style="color:#fca5a5">\u26A0 SECOND FAULT \u2014 Network outage</div><div class="b-text" style="color:#fca5a5">Estimated impact: <strong>'+COST+'M per day</strong></div></div>';
+    b.innerHTML='<div><div class="b-title" style="color:#dc2626">⚠ SECOND FAULT — Network outage</div><div class="b-text" style="color:#dc2626">Estimated impact: <strong>'+COST+'M per day</strong></div></div>';
   }else{b.className='';b.innerHTML=''}
 
-  // Timeline
-  var tl=document.getElementById('timeline'),h='';
+  var tl=document.getElementById('tl-area'),h='';
   var tks=[];for(var t=0;t<=mx;t+=7)tks.push(t);
 
   h+='<div class="axis"><div class="ax-sp"></div><div class="ax-t">';
   for(var i=0;i<tks.length;i++)h+='<span class="ax-tick" style="left:'+pct(tks[i],mx)+'">'+tks[i]+'</span>';
   h+='</div></div>';
-  h+='<div class="ax-line"><div class="ax-line-sp" style="text-align:right;padding-right:14px;font-size:11px;color:#475569;font-weight:500">DAYS \u2192</div><div class="ax-line-r"></div></div>';
+  h+='<div class="ax-line"><div class="ax-line-sp" style="text-align:right;padding-right:14px;font-size:11px;color:#94a3b8;font-weight:500">DAYS →</div><div class="ax-line-r"></div></div>';
 
   h+='<div class="sec-h"><div class="sec-sp"></div><div class="sec-t">Regulatory &amp; clearance processes</div></div>';
 
@@ -244,12 +566,11 @@ function render(){
   h+='<div class="sec-h"><div class="sec-sp"></div><div class="sec-t">Industry repair path</div></div>';
   h+='<div class="i-row"><div class="i-lbl">Mobilise and repair</div><div class="i-track"><div class="i-bar" style="left:'+pct(gd,mx)+';width:'+pct(IND,mx)+'">'+IND+'d</div></div></div>';
 
-  var gc=has?(gd>0?'#ef4444':'#22c55e'):'#22d3ee';
+  var gc=has?(gd>0?'#dc2626':'#059669'):'#0891b2';
   h+='<div class="prog-row"><div class="prog-sp"></div><div class="prog-tr"><div class="prog-f" style="width:'+pct(tot,mx)+';background:linear-gradient(90deg,'+gc+' 0%,#0891b2 100%)"></div></div></div>';
 
   tl.innerHTML=h;
 
-  // Toggles — EEZ hidden until second fault fires
   var tg=document.getElementById('toggles'),th='';
   for(var i=0;i<PROCS.length;i++){
     var p=PROCS[i],isP=p.id==='permit',isEEZ=p.id==='transit_cl';
@@ -270,20 +591,18 @@ function render(){
   }
   tg.innerHTML=th;
 
-  // Actions — second fault appears once the four Scenario 1 barriers are on
   var ac=document.getElementById('actions'),ah='';
-  if(allFourOn()||fault2)ah+='<button class="act'+(fault2?' fired':'')+'" id="fault-btn" onclick="fireFault()"'+(fault2?' disabled':'')+'>\u26A1 Second fault</button>';
-  if(permitSt===2)ah+='<button id="magic-btn" onclick="preClear()">\u2726</button>';
+  if(allFourOn()||fault2)ah+='<button class="act'+(fault2?' fired':'')+'" id="fault-btn" onclick="fireFault()"'+(fault2?' disabled':'')+'>⚡ Second fault</button>';
+  if(permitSt===2)ah+='<button id="magic-btn" onclick="preClear()">✦</button>';
   ah+='<button class="act" id="reset-btn" onclick="reset()">Reset</button>';
   ac.innerHTML=ah;
 }
 
-// Legend
 (function(){
   var g=document.getElementById('leg-grid'),h='';
   for(var i=0;i<PROCS.length;i++){
     var p=PROCS[i];
-    h+='<div class="leg-card"><div class="leg-head"><span class="leg-dot" style="background:'+p.color+'"></span><span class="leg-name" style="color:'+p.color+'">'+p.label+'</span><span class="leg-meta">Sit.'+p.sit+(p.id==='permit'?' \u00B7 30\u21927\u21920d':' \u00B7 +'+p.days+'d')+'</span></div><div class="leg-detail">'+p.detail+'</div><div class="leg-gl"><em>Guideline: </em><span>'+p.guideline+'</span> <small>('+p.ref+')</small></div></div>';
+    h+='<div class="leg-card"><div class="leg-head"><span class="leg-dot" style="background:'+p.color+'"></span><span class="leg-name" style="color:'+p.color+'">'+p.label+'</span><span class="leg-meta">Sit.'+p.sit+(p.id==='permit'?' · 30→7→0d':' · +'+p.days+'d')+'</span></div><div class="leg-detail">'+p.detail+'</div><div class="leg-gl"><em>Guideline: </em><span>'+p.guideline+'</span> <small>('+p.ref+')</small></div></div>';
   }
   g.innerHTML=h;
 })();

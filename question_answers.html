@@ -1,0 +1,313 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Session 6 — Facilitator Reference</title>
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+body{background:#f8fafc;font-family:'Segoe UI',system-ui,-apple-system,sans-serif;color:#334155;min-height:100vh;display:flex;flex-direction:column;align-items:center;padding:48px 24px}
+
+.page{max-width:860px;width:100%}
+
+.q-label{font-size:14px;font-weight:700;text-transform:uppercase;letter-spacing:2px;margin-bottom:16px;text-align:center;color:#0891b2}
+.q-text{font-size:28px;font-weight:800;color:#0f172a;line-height:1.3;text-align:center;margin-bottom:32px}
+
+.toolbar{display:flex;justify-content:flex-end;margin-bottom:12px}
+.expand-link{font-size:13px;color:#0891b2;cursor:pointer;font-weight:600;border:none;background:none;font-family:inherit;text-decoration:underline;text-underline-offset:2px}
+.expand-link:hover{color:#0e7490}
+
+/* ============================================================
+   PILL CONFIG — same structure as repair_timeline.html PROCS
+   Update content here and it flows into the accordion.
+   ============================================================ */
+
+/* ============================================================
+   ACCORDION PILLS
+   ============================================================ */
+.pill{border-radius:12px;border:2px solid #e2e8f0;background:#fff;margin-bottom:10px;overflow:hidden;transition:border-color .3s}
+.pill.open{border-color:var(--bc)}
+.pill-head{display:flex;align-items:center;gap:14px;padding:14px 20px;cursor:pointer;user-select:none;transition:background .2s}
+.pill-head:hover{background:#f8fafc}
+.pill-letter{width:32px;height:32px;border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:15px;font-weight:800;color:#fff;flex-shrink:0}
+.pill-title{flex:1;font-size:16px;font-weight:700;color:#0f172a}
+.pill-days{font-size:13px;color:#94a3b8;font-weight:600;flex-shrink:0}
+.pill-chevron{width:20px;height:20px;flex-shrink:0;transition:transform .3s;color:#94a3b8}
+.pill.open .pill-chevron{transform:rotate(180deg)}
+
+.pill-body{max-height:0;overflow:hidden;transition:max-height .4s ease}
+.pill.open .pill-body{max-height:3000px}
+.pill-content{padding:0 20px 20px;border-top:1px solid #f1f5f9}
+
+.pill-section{margin-top:16px}
+.pill-section-label{font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:1.5px;margin-bottom:8px;display:flex;align-items:center;gap:6px}
+.pill-section-label .dot{width:8px;height:8px;border-radius:50%;flex-shrink:0}
+
+.challenge-text{font-size:14px;color:#475569;line-height:1.7;padding:12px 16px;background:#fef3c7;border-left:3px solid #f59e0b;border-radius:0 8px 8px 0}
+
+.solution{padding:10px 14px;background:#f0fdfa;border-left:3px solid #14b8a6;border-radius:0 8px 8px 0;margin-bottom:8px}
+.solution-title{font-size:14px;font-weight:700;color:#0f766e;margin-bottom:3px}
+.solution-text{font-size:13px;color:#475569;line-height:1.6}
+.solution-ref{font-size:11px;color:#94a3b8;font-weight:600;margin-top:4px}
+
+.quote-toggle{font-size:11px;color:#0d9488;cursor:pointer;font-weight:600;border:none;background:none;font-family:inherit;padding:0;margin-top:6px;display:inline-flex;align-items:center;gap:4px}
+.quote-toggle:hover{color:#0f766e}
+.quote-toggle svg{width:12px;height:12px;transition:transform .25s}
+.quote-toggle.open svg{transform:rotate(180deg)}
+.quote-box{max-height:0;overflow:hidden;transition:max-height .35s ease}
+.quote-box.open{max-height:400px}
+.quote-inner{margin-top:8px;padding:10px 14px;background:#fff;border:1px solid #d1fae5;border-radius:8px;font-size:12.5px;color:#64748b;line-height:1.65;font-style:italic}
+.quote-inner strong{font-style:normal;color:#475569;font-weight:600}
+
+@media(max-width:640px){
+  body{padding:24px 12px}
+  .q-text{font-size:22px}
+  .pill-head{padding:12px 14px;gap:10px}
+  .pill-content{padding:0 14px 16px}
+}
+</style>
+</head>
+<body>
+
+<div class="page">
+  <div class="q-label" style="color:#0891b2">Question 1 &amp; Question 2</div>
+  <div class="q-text">How would you make the processes (a)–(e) faster and more streamlined so the repair ship can start fixing the fault sooner?</div>
+
+  <div class="toolbar">
+    <button class="expand-link" id="expand-all" onclick="toggleAll()">Expand all</button>
+  </div>
+
+  <div id="pills"></div>
+</div>
+
+<script>
+/* ============================================================
+   PILL CONFIG — edit content here; accordion renders from this.
+   Keep structure identical to repair_timeline PROCS for easy sync.
+   ============================================================ */
+var PILLS = [
+  {
+    letter: 'a',
+    cardTitle: 'Agency ping-pong',
+    days: 3,
+    color: '#d97706',
+    borderColor: '#f59e0b',
+    challenge: 'In the scenario, the cable operator spends valuable time trying to identify which government ministry handles submarine cable repair permits. Without a clear entry point, they are referred across four separate departments before finding the right contact — adding days of delay before any application can even begin.',
+    solutions: [
+      {
+        title: 'Single point of contact',
+        text: 'The ASEAN Guidelines encourage Member States to establish a transparent regulatory framework by appointing a single point of contact for the entire permit application process wherever possible. This gives operators one clear door to knock on.',
+        ref: 'Principle 8(c)',
+        quote: 'Encourage transparent regulatory framework and permitting processes, e.g., publishing guidelines on application requirements and how applicants may apply, and the permits required for the repairs of submarine cables, including clear contact points for applications, and where possible, <strong>appointing a single point of contact</strong> for the application process for the required permits.'
+      },
+      {
+        title: 'Single coordinating body',
+        text: 'The Guidelines recommend formally designating a single government agency to handle cross-agency coordination — smoothing out internal processes and facilitating direct permit issuance once the required information has been verified.',
+        ref: 'Annex A, Section D(i)',
+        quote: '<strong>Appointing a single government agency</strong> to coordinate across all relevant agencies and facilitate the issuance of relevant permits and approvals for submarine cable repairs, once verified and if consistent with domestic protocols, procedures, laws and regulations, where applicable.'
+      },
+      {
+        title: 'Designated implementing body',
+        text: 'Member States are encouraged to designate a clear internal implementing body tasked specifically with managing and executing activities tied to these guidelines, ensuring accountability and follow-through.',
+        ref: 'Paragraph 7',
+        quote: 'ASEAN Member States agree to designate their respective authorities to be the <strong>Implementing Body responsible for coordinating, implementing and managing</strong> activities relating to this set of Guidelines.'
+      }
+    ]
+  },
+  {
+    letter: 'b',
+    cardTitle: 'Foreign ship in domestic waters',
+    days: '7 / 42 / 56',
+    color: '#dc2626',
+    borderColor: '#ef4444',
+    challenge: 'In the scenario, the only available repair ship is foreign-flagged with an international crew. Domestic cabotage laws classify cable repair as a restricted activity, triggering a multi-week waiver application cycle that can stretch from 7 days to 8 weeks — while the cable remains broken.',
+    solutions: [
+      {
+        title: 'Consider exempting cable repair from cabotage rules',
+        text: 'The Guidelines suggest that Member States consider not defining submarine cable repair operations as cabotage. This approach recognises that cable repair is a highly specialised global service with a very limited fleet, quite different from routine domestic shipping activities.',
+        ref: 'Annex A, Section D(viii)',
+        quote: 'To <strong>not define submarine cable repairs as cabotage</strong>, and to exempt such activities from national cabotage laws to avoid delays.'
+      },
+      {
+        title: 'Review flag and crew restrictions',
+        text: 'The Guidelines encourage removing restrictive flag or crewing requirements that may prevent foreign cable vessels from operating within the Territorial Sea, Archipelagic Waters, EEZ, or Continental Shelf — aligning local practice with international UNCLOS obligations.',
+        ref: 'Annex A, Section D(ix)',
+        quote: 'To <strong>not apply flag or crewing restrictions</strong> that obstruct foreign cable repair vessels from operating in Territorial Sea, Archipelagic Waters, EEZ or continental shelf, where such restrictions would conflict with international obligations.'
+      },
+      {
+        title: 'Simplify vessel regulations',
+        text: 'Member States are encouraged to actively simplify and consider blanket exemptions for state-level regulations and policies that impact specialised cable-repair ships, recognising their unique role in maintaining critical infrastructure.',
+        ref: 'Principle 8(d)',
+        quote: 'Seek to <strong>streamline and simplify (if possible, applying exemptions to)</strong> the regulations and policies of the individual ASEAN Member States for vessels working on submarine cables.'
+      }
+    ]
+  },
+  {
+    letter: 'c',
+    cardTitle: 'Equipment import duties',
+    days: 7,
+    color: '#dc2626',
+    borderColor: '#ef4444',
+    challenge: 'In the scenario, essential repair equipment — spare cables and repeaters — is categorised as standard commercial imports upon arrival. Items are held at port during lengthy customs valuation processes. Disagreements on item values add further delay, even though this equipment will be used and removed once the repair is complete.',
+    solutions: [
+      {
+        title: 'Streamline spare parts clearance',
+        text: 'The Guidelines recommend overhauling and simplifying customs procedures specifically for submarine cable equipment, so that engineering teams can gain rapid, unobstructed access to the spare inventory they need for repairs.',
+        ref: 'Annex A, Section D(vi)',
+        quote: '<strong>Simplifying customs duties processes</strong> on submarine cable equipment imported to facilitate quick access to spare plants for repair.'
+      },
+      {
+        title: 'Pre-publish importation requirements',
+        text: 'Maintaining clear, publicly available guidelines outlining importation requirements and customs duty obligations for repair vessels helps operators prepare in advance, avoiding surprises at port.',
+        ref: 'Annex A, Section D(iv)',
+        quote: '<strong>Clarifying importation requirements and custom duties obligations</strong> for ships entering territorial waters to conduct repairs on submarine cables.'
+      },
+      {
+        title: 'No duties for EEZ or transit operations',
+        text: 'The Guidelines recommend that customs duties, taxes, or processing fees not be imposed on repair work happening beyond territorial seas, or on specialised vessels merely transiting through the EEZ.',
+        ref: 'Annex A, Section D(vii)',
+        quote: '<strong>Not imposing customs duties, taxes, and fees</strong> on repair activities conducted beyond territorial waters or on vessels transiting through the EEZ.'
+      }
+    ]
+  },
+  {
+    letter: 'd',
+    cardTitle: 'Long processing times',
+    days: 43,
+    color: '#7c3aed',
+    borderColor: '#a855f7',
+    challenge: 'In the scenario, the operator must apply separately for environmental, spatial, maritime, and security permits. Some of these reviews run sequentially rather than in parallel, and are managed by different departments with their own timelines. The cumulative effect stretches the permitting phase to 43 days.',
+    solutions: [
+      {
+        title: '7–10 working day processing target',
+        text: 'The Guidelines encourage Member States to compress review cycles into a target of 7 to 10 working days. This timeframe recognises the urgency of restoring critical submarine cable infrastructure while still allowing thorough review.',
+        ref: 'Annex A, Section D(ii)',
+        quote: 'Streamlining approval processes to issue the necessary permits within <strong>seven (7) to ten (10) working days</strong> where possible. Where the information as required in Section C above is already provided by the applicant, the necessary permits should be approved without the further need for more information to be provided.'
+      },
+      {
+        title: 'Standard information bundle — no repeated requests',
+        text: 'When an applicant submits the standard information bundle defined in the Guidelines (Work Method Statement, Route Position Lists, vessel details), agencies are encouraged to approve permits without requesting redundant or unnecessary additional data.',
+        ref: 'Annex A, Section C',
+        quote: 'Permit applications <strong>should not contain unnecessary information requirements</strong> and should only request relevant information such as: introduction of the applicant and the submarine cable system to be repaired; general description of the project; operations overview in a Work Method Statement report; particulars of the repair/cable vessels…'
+      },
+      {
+        title: 'Annual pre-clearance programme',
+        text: 'Implementing annual pre-clearance programmes for authorised repair vessels and their technical crews helps bypass real-time immigration or security review delays when an active fault occurs — preparation done in advance, so response is immediate.',
+        ref: 'Annex A, Section D(iii)',
+        quote: 'Expediting the permit process in the event of cable repair works, the relevant authorities of ASEAN Member States should offer <strong>annual pre-clearance of repair vessels and vessel crew</strong>, if clearance of such vessels/crew are required.'
+      }
+    ]
+  },
+  {
+    letter: 'e',
+    cardTitle: 'Port entry for cable fault in EEZ',
+    days: 3,
+    color: '#dc2626',
+    borderColor: '#ef4444',
+    challenge: 'In the scenario, even though the cable fault is located in the Exclusive Economic Zone — well beyond territorial waters — the repair ship is required to detour to a domestic port. There it must clear physical immigration, pay port fees, and formally process temporary importation paperwork. This adds days of delay while the country’s internet connectivity remains degraded.',
+    solutions: [
+      {
+        title: 'Consider removing port detour requirements',
+        text: 'The Guidelines suggest that port entry or physical docking should not be required for cable ships performing repairs beyond territorial waters. The repair activity occurs at the fault site, not at port.',
+        ref: 'Annex A, Section D(v)',
+        quote: '<strong>Not requiring the port entry</strong> for submarine cable ships conducting repairs beyond territorial waters.'
+      },
+      {
+        title: 'Respect international maritime boundaries',
+        text: 'Ensuring that all permitting and operational requirements respect the distinction between Territorial Sea (≤ 12 nm) and EEZ (≤ 200 nm) helps align domestic practice with the legal freedoms established under the 1982 UNCLOS framework.',
+        ref: 'Paragraph 6',
+        quote: 'Consistent with UNCLOS, the Guidelines recognise the <strong>different legal regimes applicable to the Territorial Sea (up to 12 nautical miles), Archipelagic Waters, Exclusive Economic Zone (up to 200nm)</strong>, Continental Shelf, and the High Seas. These distinctions should guide permit requirements and operational constraints for submarine cable projects.'
+      },
+      {
+        title: 'No fees or taxes for EEZ activities',
+        text: 'The Guidelines recommend that local fees, taxes, or customs duties not be imposed on activities occurring within the EEZ or on vessels exercising international transit freedoms.',
+        ref: 'Annex A, Section D(vii)',
+        quote: '<strong>Not imposing customs duties, taxes, and fees</strong> on repair activities conducted beyond territorial waters or on vessels transiting through the EEZ.'
+      }
+    ]
+  }
+];
+/* ============================================================
+   END CONFIG
+   ============================================================ */
+
+var allOpen = false;
+var openIdx = -1;
+
+function renderPills() {
+  var c = document.getElementById('pills');
+  var h = '';
+  for (var i = 0; i < PILLS.length; i++) {
+    var p = PILLS[i];
+    var isOpen = allOpen || i === openIdx;
+    h += '<div class="pill' + (isOpen ? ' open' : '') + '" style="--bc:' + p.borderColor + '" data-idx="' + i + '">';
+    h += '<div class="pill-head" onclick="togglePill(' + i + ')">';
+    h += '<div class="pill-letter" style="background:' + p.color + '">' + p.letter + '</div>';
+    h += '<div class="pill-title">' + p.cardTitle + '</div>';
+    h += '<div class="pill-days">' + p.days + ' days</div>';
+    h += '<svg class="pill-chevron" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M5.23 7.21a.75.75 0 011.06.02L10 11.168l3.71-3.938a.75.75 0 111.08 1.04l-4.25 4.5a.75.75 0 01-1.08 0l-4.25-4.5a.75.75 0 01.02-1.06z"/></svg>';
+    h += '</div>';
+    h += '<div class="pill-body"><div class="pill-content">';
+
+    h += '<div class="pill-section">';
+    h += '<div class="pill-section-label"><span class="dot" style="background:#f59e0b"></span> The challenge in the scenario</div>';
+    h += '<div class="challenge-text">' + p.challenge + '</div>';
+    h += '</div>';
+
+    h += '<div class="pill-section">';
+    h += '<div class="pill-section-label"><span class="dot" style="background:#14b8a6"></span> What the ASEAN Guidelines recommend</div>';
+    for (var s = 0; s < p.solutions.length; s++) {
+      var sol = p.solutions[s];
+      var qid = 'q-' + i + '-' + s;
+      h += '<div class="solution">';
+      h += '<div class="solution-title">' + sol.title + '</div>';
+      h += '<div class="solution-text">' + sol.text + '</div>';
+      h += '<div class="solution-ref">' + sol.ref + '</div>';
+      if (sol.quote) {
+        h += '<button class="quote-toggle" onclick="toggleQuote(\'' + qid + '\',this,event)">View guideline text <svg viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M5.23 7.21a.75.75 0 011.06.02L10 11.168l3.71-3.938a.75.75 0 111.08 1.04l-4.25 4.5a.75.75 0 01-1.08 0l-4.25-4.5a.75.75 0 01.02-1.06z"/></svg></button>';
+        h += '<div class="quote-box" id="' + qid + '"><div class="quote-inner">“' + sol.quote + '”</div></div>';
+      }
+      h += '</div>';
+    }
+    h += '</div>';
+
+    h += '</div></div>';
+    h += '</div>';
+  }
+  c.innerHTML = h;
+}
+
+function toggleQuote(id, btn, e) {
+  e.stopPropagation();
+  var box = document.getElementById(id);
+  var isOpen = box.classList.toggle('open');
+  btn.classList.toggle('open', isOpen);
+  btn.firstChild.textContent = isOpen ? 'Hide guideline text ' : 'View guideline text ';
+}
+
+function togglePill(idx) {
+  if (allOpen) {
+    allOpen = false;
+    openIdx = (idx === openIdx) ? -1 : idx;
+  } else {
+    openIdx = (idx === openIdx) ? -1 : idx;
+  }
+  updateExpandLabel();
+  renderPills();
+}
+
+function toggleAll() {
+  allOpen = !allOpen;
+  if (!allOpen) openIdx = -1;
+  updateExpandLabel();
+  renderPills();
+}
+
+function updateExpandLabel() {
+  document.getElementById('expand-all').textContent = allOpen ? 'Collapse all' : 'Expand all';
+}
+
+renderPills();
+</script>
+</body>
+</html>

@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Session 6 — Facilitator Reference</title>
+<title>ASEAN Guideline reference</title>
 <style>
 *{margin:0;padding:0;box-sizing:border-box}
 body{background:#f8fafc;font-family:'Segoe UI',system-ui,-apple-system,sans-serif;color:#334155;min-height:100vh;display:flex;flex-direction:column;align-items:center;padding:48px 24px}
@@ -17,14 +17,6 @@ body{background:#f8fafc;font-family:'Segoe UI',system-ui,-apple-system,sans-seri
 .expand-link{font-size:13px;color:#0891b2;cursor:pointer;font-weight:600;border:none;background:none;font-family:inherit;text-decoration:underline;text-underline-offset:2px}
 .expand-link:hover{color:#0e7490}
 
-/* ============================================================
-   PILL CONFIG — same structure as repair_timeline.html PROCS
-   Update content here and it flows into the accordion.
-   ============================================================ */
-
-/* ============================================================
-   ACCORDION PILLS
-   ============================================================ */
 .pill{border-radius:12px;border:2px solid #e2e8f0;background:#fff;margin-bottom:10px;overflow:hidden;transition:border-color .3s}
 .pill.open{border-color:var(--bc)}
 .pill-head{display:flex;align-items:center;gap:14px;padding:14px 20px;cursor:pointer;user-select:none;transition:background .2s}
@@ -71,7 +63,7 @@ body{background:#f8fafc;font-family:'Segoe UI',system-ui,-apple-system,sans-seri
 
 <div class="page">
   <div class="q-label" style="color:#0891b2">Question 1 &amp; Question 2</div>
-  <div class="q-text">How would you make the processes (a)–(e) faster and more streamlined so the repair ship can start fixing the fault sooner?</div>
+  <div class="q-text">How would you make the processes (a)&ndash;(e) faster and more streamlined so the repair ship can start fixing the fault sooner?</div>
 
   <div class="toolbar">
     <button class="expand-link" id="expand-all" onclick="toggleAll()">Expand all</button>
@@ -82,16 +74,61 @@ body{background:#f8fafc;font-family:'Segoe UI',system-ui,-apple-system,sans-seri
 
 <script>
 /* ============================================================
-   PILL CONFIG — edit content here; accordion renders from this.
-   Keep structure identical to repair_timeline PROCS for easy sync.
+   PROCS — copy this block directly from repair_timeline.html.
+   Only this block needs to stay in sync between the two files.
    ============================================================ */
-var PILLS = [
-  {
-    letter: 'a',
-    cardTitle: 'Agency ping-pong',
-    days: 3,
-    color: '#d97706',
-    borderColor: '#f59e0b',
+var PROCS=[
+  { id:'coord',     label:'No lead agency',      days:3,
+    color:'#d97706', sit:0,
+    detail:'No single point of contact — operator contacts 4 agencies separately',
+    guideline:'Appoint a single coordinating agency', ref:'Principle 8(c), Annex D(i)',
+    letter:'a', cardTitle:'Agency ping-pong',
+    borderColor:'#f59e0b', titleColor:'#b45309',
+    cardDetail:'The operator tries to work out which government ministry is responsible. They get passed around through 4 ministries.' },
+
+  { id:'vessel',    label:'Cabotage',             days:7, days2:42, days3:56,
+    color:'#dc2626', sit:1, parallel:true,
+    detail:'Foreign-flagged ship blocked — cabotage waiver process. Click cycles: 7d → 6 wk → 8 wk',
+    guideline:'Do not define cable repair as cabotage; no flag/crewing restrictions', ref:'Annex D(viii)–(ix)',
+    letter:'b', cardTitle:'Foreign ship in domestic waters',
+    borderColor:'#ef4444', titleColor:'#dc2626',
+    cardDetail:"Cable repair falls under cabotage laws. The ship is foreign-flagged. Country A’s laws restrict foreign ships and crew from working in domestic waters." },
+
+  { id:'trade',     label:'Custom duties',        days:7,
+    color:'#dc2626', sit:1,
+    detail:'Equipment held at port for customs duty assessment',
+    guideline:'Exempt repair equipment from customs duties', ref:'Annex D(vi)–(vii)',
+    letter:'c', cardTitle:'Equipment import duties',
+    borderColor:'#ef4444', titleColor:'#dc2626',
+    cardDetail:'Country A treats spare cables and repeaters as standard commercial imports. Equipment held at port while duties are assessed. Disagreements on item values.' },
+
+  { id:'permit',    label:'Permitting',           days:43,
+    color:'#7c3aed', sit:2,
+    detail:'Multiple agencies — spatial zoning, security clearance, environmental review, underwater work permit',
+    guideline:'Annual pre-clearance of vessel & crew; 7–10 day target', ref:'Annex D(ii)–(iii)',
+    letter:'d', cardTitle:'Long processing times',
+    borderColor:'#a855f7', titleColor:'#7c3aed',
+    cardDetail:'Applications for environmental, spatial, maritime, and security permits. Some are sequential, managed by different departments.' },
+
+  { id:'transit_cl', label:'Port entry EEZ fault', days:3,
+    color:'#dc2626', sit:1,
+    detail:'Ship diverted to port for EEZ fault / temporary importation paperwork',
+    guideline:'No port entry for ships repairing beyond territorial waters', ref:'Annex D(v),(vii)',
+    letter:'e', cardTitle:'Port entry for cable fault in EEZ',
+    borderColor:'#ef4444', titleColor:'#dc2626',
+    cardDetail:'Despite the fault being in the EEZ, Country A requires the vessel to make a detour and dock at port to clear immigration, pay port fees, and formally process the temporary importation of the subsea cable equipment spares. This adds {DAYS} days in addition to the other processes in Question 1. Meanwhile the country continues to not have a usable internet.' }
+];
+/* ============================================================
+   END PROCS — do not edit below this line when syncing
+   ============================================================ */
+
+
+/* ============================================================
+   ANSWERS — challenge descriptions, solutions, and guideline
+   quotes layered on top of PROCS. Keyed by PROCS id.
+   ============================================================ */
+var ANSWERS = {
+  coord: {
     challenge: 'In the scenario, the cable operator spends valuable time trying to identify which government ministry handles submarine cable repair permits. Without a clear entry point, they are referred across four separate departments before finding the right contact — adding days of delay before any application can even begin.',
     solutions: [
       {
@@ -114,12 +151,7 @@ var PILLS = [
       }
     ]
   },
-  {
-    letter: 'b',
-    cardTitle: 'Foreign ship in domestic waters',
-    days: '7 / 42 / 56',
-    color: '#dc2626',
-    borderColor: '#ef4444',
+  vessel: {
     challenge: 'In the scenario, the only available repair ship is foreign-flagged with an international crew. Domestic cabotage laws classify cable repair as a restricted activity, triggering a multi-week waiver application cycle that can stretch from 7 days to 8 weeks — while the cable remains broken.',
     solutions: [
       {
@@ -142,12 +174,7 @@ var PILLS = [
       }
     ]
   },
-  {
-    letter: 'c',
-    cardTitle: 'Equipment import duties',
-    days: 7,
-    color: '#dc2626',
-    borderColor: '#ef4444',
+  trade: {
     challenge: 'In the scenario, essential repair equipment — spare cables and repeaters — is categorised as standard commercial imports upon arrival. Items are held at port during lengthy customs valuation processes. Disagreements on item values add further delay, even though this equipment will be used and removed once the repair is complete.',
     solutions: [
       {
@@ -170,12 +197,7 @@ var PILLS = [
       }
     ]
   },
-  {
-    letter: 'd',
-    cardTitle: 'Long processing times',
-    days: 43,
-    color: '#7c3aed',
-    borderColor: '#a855f7',
+  permit: {
     challenge: 'In the scenario, the operator must apply separately for environmental, spatial, maritime, and security permits. Some of these reviews run sequentially rather than in parallel, and are managed by different departments with their own timelines. The cumulative effect stretches the permitting phase to 43 days.',
     solutions: [
       {
@@ -198,12 +220,7 @@ var PILLS = [
       }
     ]
   },
-  {
-    letter: 'e',
-    cardTitle: 'Port entry for cable fault in EEZ',
-    days: 3,
-    color: '#dc2626',
-    borderColor: '#ef4444',
+  transit_cl: {
     challenge: 'In the scenario, even though the cable fault is located in the Exclusive Economic Zone — well beyond territorial waters — the repair ship is required to detour to a domestic port. There it must clear physical immigration, pay port fees, and formally process temporary importation paperwork. This adds days of delay while the country’s internet connectivity remains degraded.',
     solutions: [
       {
@@ -226,10 +243,28 @@ var PILLS = [
       }
     ]
   }
-];
+};
 /* ============================================================
-   END CONFIG
+   END ANSWERS
    ============================================================ */
+
+
+/* --- Merge PROCS + ANSWERS into renderable PILLS array --- */
+var PILLS = [];
+for (var i = 0; i < PROCS.length; i++) {
+  var p = PROCS[i], a = ANSWERS[p.id];
+  if (!a) continue;
+  var daysLabel = p.id === 'vessel' ? (p.days + ' / ' + p.days2 + ' / ' + p.days3) : p.days;
+  PILLS.push({
+    letter: p.letter,
+    cardTitle: p.cardTitle,
+    days: daysLabel,
+    color: p.color,
+    borderColor: p.borderColor,
+    challenge: a.challenge,
+    solutions: a.solutions
+  });
+}
 
 var allOpen = false;
 var openIdx = -1;

@@ -1,0 +1,79 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1000 450" width="100%" height="100%">
+  <style>
+    .chart-title { font-family: Arial, sans-serif; font-size: 20px; fill: #555555; text-anchor: middle; }
+    .axis-label { font-family: Arial, sans-serif; font-size: 12px; fill: #777777; }
+    .x-tick { font-family: Arial, sans-serif; font-size: 13px; fill: #555555; text-anchor: middle; }
+    .legend-text { font-family: Arial, sans-serif; font-size: 14px; fill: #333333; }
+    .grid-line { stroke: #e5e7eb; stroke-width: 1; }
+    .trend-repairs { stroke: #1e3a8a; stroke-width: 2; stroke-dasharray: 3,3; fill: none; }
+    .trend-km { stroke: #22c55e; stroke-width: 2; stroke-dasharray: 3,3; fill: none; }
+  </style>
+
+  <rect width="100%" height="100%" fill="#ffffff"/>
+
+  <text x="500" y="35" class="chart-title">Repairs per year vs. total in-service cable length</text>
+
+  <g>
+    <text x="110" y="94" class="axis-label" text-anchor="end">300</text><line x1="120" y1="90" x2="880" y2="90" class="grid-line"/>
+    <text x="110" y="144" class="axis-label" text-anchor="end">250</text><line x1="120" y1="140" x2="880" y2="140" class="grid-line"/>
+    <text x="110" y="194" class="axis-label" text-anchor="end">200</text><line x1="120" y1="190" x2="880" y2="190" class="grid-line"/>
+    <text x="110" y="244" class="axis-label" text-anchor="end">150</text><line x1="120" y1="240" x2="880" y2="240" class="grid-line"/>
+    <text x="110" y="294" class="axis-label" text-anchor="end">100</text><line x1="120" y1="290" x2="880" y2="290" class="grid-line"/>
+    <text x="110" y="344" class="axis-label" text-anchor="end">50</text><line x1="120" y1="340" x2="880" y2="340" class="grid-line"/>
+    <text x="110" y="394" class="axis-label" text-anchor="end">0</text><line x1="120" y1="390" x2="880" y2="390" stroke="#9ca3af" stroke-width="1.5"/>
+  </g>
+
+  <g text-anchor="start">
+    <text x="890" y="94" class="axis-label">2,500,000 km</text>
+    <text x="890" y="154" class="axis-label">2,000,000 km</text>
+    <text x="890" y="214" class="axis-label">1,500,000 km</text>
+    <text x="890" y="274" class="axis-label">1,000,000 km</text>
+    <text x="890" y="334" class="axis-label">500,000 km</text>
+    <text x="890" y="394" class="axis-label">0 km</text>
+  </g>
+
+  <g id="bars">
+    <rect x="140" y="214" width="12" height="176" fill="#1f6587"/>
+    <rect x="153" y="276" width="12" height="114" fill="#4ade80"/>
+    <text x="152" y="412" class="x-tick">2011</text>
+
+    <rect x="240" y="178" width="12" height="212" fill="#1f6587"/>
+    <rect x="253" y="266" width="12" height="124" fill="#4ade80"/>
+    <text x="252" y="412" class="x-tick">2013</text>
+
+    <rect x="340" y="186" width="12" height="204" fill="#1f6587"/>
+    <rect x="353" y="262" width="12" height="128" fill="#4ade80"/>
+    <text x="352" y="412" class="x-tick">2015</text>
+
+    <rect x="440" y="150" width="12" height="240" fill="#1f6587"/>
+    <rect x="453" y="244" width="12" height="146" fill="#4ade80"/>
+    <text x="452" y="412" class="x-tick">2017</text>
+
+    <rect x="540" y="212" width="12" height="178" fill="#1f6587"/>
+    <rect x="553" y="220" width="12" height="170" fill="#4ade80"/>
+    <text x="552" y="412" class="x-tick">2019</text>
+
+    <rect x="640" y="206" width="12" height="184" fill="#1f6587"/>
+    <rect x="653" y="196" width="12" height="194" fill="#4ade80"/>
+    <text x="652" y="412" class="x-tick">2021</text>
+
+    <rect x="740" y="184" width="12" height="206" fill="#1f6587"/>
+    <rect x="753" y="178" width="12" height="212" fill="#4ade80"/>
+    <text x="752" y="412" class="x-tick">2023</text>
+
+    <rect x="840" y="210" width="12" height="180" fill="#1f6587"/>
+    <rect x="853" y="160" width="12" height="230" fill="#4ade80"/>
+    <text x="852" y="412" class="x-tick">2025</text>
+  </g>
+
+  <line x1="146" y1="194" x2="846" y2="192" class="trend-repairs"/>
+  <line x1="146" y1="290" x2="846" y2="160" class="trend-km"/>
+
+  <g transform="translate(400, 435)">
+    <rect x="0" y="0" width="16" height="12" fill="#1f6587"/>
+    <text x="24" y="11" class="legend-text">Repairs</text>
+
+    <rect x="110" y="0" width="16" height="12" fill="#4ade80"/>
+    <text x="134" y="11" class="legend-text">Cable kilometers</text>
+  </g>
+</svg>

@@ -1,0 +1,92 @@
+<svg width="1280" height="720" xmlns="http://www.w3.org/2000/svg" font-family="'Segoe UI', system-ui, sans-serif">
+ <defs>
+  <linearGradient id="cable" x1="0" y1="0" x2="1" y2="0">
+   <stop offset="0%" stop-color="#0A5566"/>
+   <stop offset="100%" stop-color="#0C7E9A"/>
+  </linearGradient>
+ </defs>
+ <!-- Zone 3: open sea (third / darkest of the three) -->
+ <!-- Zone 2: EEZ -->
+ <!-- Zone 1: territorial sea (lightest, nearest shore) -->
+ <!-- Faint grid (water only; land drawn over it) -->
+ <!-- Country A landmass -->
+ <!-- Zone boundaries (dashed, follow the coast) -->
+ <!-- EEZ width measurement bracket (top, faint) -->
+ <!-- Submarine cables -->
+ <!-- Ship route to port (amber dotted) -->
+ <!-- Cable Fault 1 (territorial sea) -->
+ <!-- Cable Fault 2 (EEZ) -->
+ <!-- Country A label -->
+ <!-- Port -->
+ <!-- Vessel -->
+ <!-- Legend -->
+ <g>
+  <title>Layer 1</title>
+  <rect width="1280" height="720" fill="#7FB8DC" id="svg_1"/>
+  <path d="m850,0c-60,180 -60,540 0,720l-380,0c-70,-180 -70,-540 0,-720l380,0z" fill="#ABD3E9" id="svg_2"/>
+  <path d="m1000,0c-60,180 -60,540 0,720l-150,0c-60,-180 -60,-540 0,-720l150,0z" fill="#D6EAF4" id="svg_3"/>
+  <g stroke="#FFFFFF" stroke-opacity="0.25" id="svg_4">
+   <line x1="0" y1="180" x2="1280" y2="180" id="svg_5"/>
+   <line x1="0" y1="360" x2="1280" y2="360" id="svg_6"/>
+   <line x1="0" y1="540" x2="1280" y2="540" id="svg_7"/>
+   <line x1="210" y1="0" x2="210" y2="720" id="svg_8"/>
+   <line x1="640" y1="0" x2="640" y2="720" id="svg_9"/>
+  </g>
+  <path d="m1000,0c-60,180 -60,540 0,720l280,0l0,-720l-280,0z" fill="#F1D9A6" stroke="#C9A86B" stroke-width="3" id="svg_10"/>
+  <g stroke="#5A6B82" stroke-width="2" stroke-dasharray="10 8" fill="none" stroke-opacity="0.7" id="svg_11">
+   <path d="m850,0c-60,180 -60,540 0,720" id="svg_12"/>
+   <path d="m470,0c-70,180 -70,540 0,720" id="svg_13"/>
+  </g>
+  <g stroke="url(#cable)" stroke-width="6" fill="none" stroke-linecap="round" id="svg_18">
+   <path d="m0,235q480,33 985,33" id="svg_19"/>
+   <path d="m0,525q480,-20 985,-27" id="svg_20"/>
+  </g>
+  <path d="m305,450q295,-22 600,-70" fill="none" stroke="#E07B1A" stroke-width="4" stroke-dasharray="3 9" stroke-linecap="round" id="svg_21"/>
+  <polygon points="935,378 916,369 916,389" fill="#E07B1A" id="svg_22"/>
+  <g id="svg_23">
+   <text x="899" y="200" font-size="22" font-weight="700" fill="#C0392B" text-anchor="middle" id="svg_24">Cable Fault</text>
+   <circle cx="899" cy="226" r="15" fill="#E1352B" id="svg_25"/>
+   <text x="899" y="232" font-size="18" font-weight="700" fill="#FFFFFF" text-anchor="middle" id="svg_26">1</text>
+   <g stroke="#E1352B" stroke-width="6" stroke-linecap="round" id="svg_27">
+    <line x1="877" y1="256" x2="899" y2="278" id="svg_28"/>
+    <line x1="899" y1="256" x2="877" y2="278" id="svg_29"/>
+   </g>
+   <text x="888" y="306" font-size="15" fill="#2C4A66" text-anchor="middle" id="svg_30">(in territorial sea)</text>
+  </g>
+  <g id="svg_31">
+   <text x="630" y="470" font-size="22" font-weight="700" fill="#C0392B" text-anchor="middle" id="svg_32">Cable Fault</text>
+   <circle cx="705" cy="463" r="15" fill="#E1352B" id="svg_33"/>
+   <text x="705" y="469" font-size="18" font-weight="700" fill="#FFFFFF" text-anchor="middle" id="svg_34">2</text>
+   <g stroke="#E1352B" stroke-width="6" stroke-linecap="round" id="svg_35">
+    <line x1="644" y1="489" x2="666" y2="511" id="svg_36"/>
+    <line x1="666" y1="489" x2="644" y2="511" id="svg_37"/>
+   </g>
+   <text x="655" y="538" font-size="15" fill="#2C4A66" text-anchor="middle" id="svg_38">(in EEZ)</text>
+  </g>
+  <text x="1120" y="350" font-size="34" font-weight="800" fill="#1E3A5F" text-anchor="middle" id="svg_39">COUNTRY A</text>
+  <g id="svg_40">
+   <rect x="932" y="366" width="36" height="24" rx="4" fill="none" stroke="#C0392B" stroke-width="3" id="svg_41"/>
+   <line x1="932" y1="378" x2="968" y2="378" stroke="#C0392B" stroke-width="3" id="svg_42"/>
+   <text x="990" y="384" font-size="16" font-weight="600" fill="#1E3A5F" id="svg_43">PORT</text>
+  </g>
+  <g id="svg_44">
+   <path d="m173,415l64,0l-10,22l-44,0l-10,-22z" fill="#1E3A5F" id="svg_45"/>
+   <rect x="191" y="401" width="28" height="14" fill="#1E3A5F" id="svg_46"/>
+   <text x="205" y="461" font-size="18" font-weight="700" fill="#1E3A5F" text-anchor="middle" id="svg_47">CS RepairShip</text>
+  </g>
+  <g id="svg_48">
+   <rect x="640" y="648" width="620" height="48" rx="8" fill="#FFFFFF" stroke="#C9A86B" stroke-width="1.5" id="svg_49"/>
+   <line x1="660" y1="672" x2="690" y2="672" stroke="#0C7E9A" stroke-width="4" id="svg_50"/>
+   <text x="698" y="677" font-size="13" fill="#1E3A5F" id="svg_51">Submarine cable</text>
+   <g stroke="#E1352B" stroke-width="3" id="svg_52">
+    <line x1="830" y1="666" x2="842" y2="678" id="svg_53"/>
+    <line x1="842" y1="666" x2="830" y2="678" id="svg_54"/>
+   </g>
+   <text x="852" y="677" font-size="13" fill="#1E3A5F" id="svg_55">Cable fault</text>
+   <line x1="960" y1="672" x2="1000" y2="672" stroke="#5A6B82" stroke-width="2" stroke-dasharray="6 5" id="svg_56"/>
+   <text x="1008" y="677" font-size="13" fill="#1E3A5F" id="svg_57">Maritime boundary</text>
+   <path d="m1150,666l24,0l-4,12l-16,0l-4,-12z" fill="#1E3A5F" id="svg_58"/>
+   <text x="1184" y="677" font-size="13" fill="#1E3A5F" id="svg_59">Vessel</text>
+  </g>
+ </g>
+</svg>

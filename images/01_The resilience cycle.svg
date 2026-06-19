@@ -1,0 +1,131 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 900 780" width="100%" height="100%">
+  <defs>
+    <!-- Smooth drop shadow for card depth -->
+    <filter id="card-shadow" x="-10%" y="-10%" width="125%" height="125%">
+      <feDropShadow dx="0" dy="8" stdDeviation="8" flood-color="#0f172a" flood-opacity="0.08"/>
+    </filter>
+    
+    <!-- Bold, high-visibility directional arrowheads -->
+    <marker id="arrow-right" viewBox="0 0 10 10" refX="6" refY="5" markerWidth="8" markerHeight="8" orient="auto">
+      <path d="M 1 2 L 8 5 L 1 8 Z" fill="#64748b" />
+    </marker>
+    <marker id="arrow-down" viewBox="0 0 10 10" refX="6" refY="5" markerWidth="8" markerHeight="8" orient="auto">
+      <path d="M 1 2 L 8 5 L 1 8 Z" fill="#64748b" />
+    </marker>
+    <marker id="arrow-left" viewBox="0 0 10 10" refX="6" refY="5" markerWidth="8" markerHeight="8" orient="auto">
+      <path d="M 1 2 L 8 5 L 1 8 Z" fill="#64748b" />
+    </marker>
+    <marker id="arrow-up" viewBox="0 0 10 10" refX="6" refY="5" markerWidth="8" markerHeight="8" orient="auto">
+      <path d="M 1 2 L 8 5 L 1 8 Z" fill="#64748b" />
+    </marker>
+
+    <!-- Translucent gradient fill for the focused presentation area -->
+    <linearGradient id="focus-gradient" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#eff6ff" stop-opacity="0.95"/>
+      <stop offset="100%" stop-color="#dbeafe" stop-opacity="0.95"/>
+    </linearGradient>
+  </defs>
+
+  <style>
+    .main-title { font-family: 'Inter', system-ui, -apple-system, sans-serif; font-size: 32px; font-weight: 800; fill: #0f172a; text-anchor: middle; }
+    
+    .card { fill: #ffffff; stroke: #e2e8f0; stroke-width: 1.5; rx: 16px; }
+    .node-title { font-family: 'Inter', system-ui, -apple-system, sans-serif; font-size: 19px; font-weight: 700; fill: #0f172a; text-anchor: middle; }
+    .node-desc { font-family: 'Inter', system-ui, -apple-system, sans-serif; font-size: 12px; font-weight: 500; fill: #475569; text-anchor: middle; }
+    
+    .focus-box { stroke: #2563eb; stroke-width: 3; stroke-dasharray: 8 6; rx: 24px; }
+    
+    .cycle-arrow { fill: none; stroke: #94a3b8; stroke-width: 3.5; stroke-linecap: round; }
+    .watermark { font-family: 'Inter', system-ui, -apple-system, sans-serif; font-size: 14px; font-weight: 700; fill: #94a3b8; }
+    .watermark-accent { fill: #3b82f6; }
+  </style>
+
+  <!-- Premium Canvas Background -->
+  <rect width="100%" height="100%" fill="#f8fafc" rx="20"/>
+
+  <!-- Presentation Header -->
+  <text x="450" y="65" class="main-title">The Resilience Cycle</text>
+
+  <!-- ================= HIGHLIGHTED PRESENTATION FOCUS BOX (BOTTOM HALF) ================= -->
+  <g id="presentation-focus-group">
+    <!-- Encloses both Respond and Recover sections cleanly -->
+    <rect x="80" y="415" width="740" height="275" fill="url(#focus-gradient)" class="focus-box" />
+  </g>
+
+  <!-- ================= CYCLIC INTER-NODE CONNECTING ARROWS ================= -->
+  <g id="connecting-arrows">
+    <!-- Top Row: Prevent -> Detect (Pointing Right) -->
+    <path d="M 330 230 L 560 230" class="cycle-arrow" marker-end="url(#arrow-right)" />
+    
+    <!-- Right Column: Detect -> Respond (Pointing Down) -->
+    <path d="M 675 320 L 675 450" class="cycle-arrow" marker-end="url(#arrow-down)" />
+    
+    <!-- Bottom Row: Respond -> Recover (Pointing Left) -->
+    <path d="M 570 550 L 340 550" class="cycle-arrow" marker-end="url(#arrow-left)" />
+    
+    <!-- Left Column: Recover -> Prevent (Pointing Up) -->
+    <path d="M 225 460 L 225 330" class="cycle-arrow" marker-end="url(#arrow-up)" />
+  </g>
+
+  <!-- ================= POSITION 1: PREVENT (TOP-LEFT) ================= -->
+  <g id="card-prevent" transform="translate(120, 140)" filter="url(#card-shadow)">
+    <rect width="210" height="180" class="card" />
+    <rect width="210" height="6" fill="#10b981" rx="3" />
+    <!-- Shield Vector Icon -->
+    <g transform="translate(15, 0)">
+      <path d="M 90 42 C 78 45, 70 50, 70 50 L 70 72 C 70 87, 83 96, 90 99 C 97 96, 110 87, 110 72 L 110 50 C 110 50, 102 45, 90 42 Z" fill="#d1fae5" stroke="#10b981" stroke-width="2.5" stroke-linejoin="round"/>
+    </g>
+    <text x="105" y="128" class="node-title">Prevent</text>
+    <text x="105" y="152" class="node-desc">Protection &amp;</text>
+    <text x="105" y="168" class="node-desc">Risk reduction</text>
+  </g>
+
+  <!-- ================= POSITION 2: DETECT (TOP-RIGHT) ================= -->
+  <g id="card-detect" transform="translate(570, 140)" filter="url(#card-shadow)">
+    <rect width="210" height="180" class="card" />
+    <rect width="210" height="6" fill="#6366f1" rx="3" />
+    <!-- Radar Vector Icon -->
+    <g transform="translate(15, 0)">
+      <circle cx="90" cy="68" r="24" fill="#e0e7ff" stroke="#6366f1" stroke-width="2.5"/>
+      <circle cx="90" cy="68" r="14" fill="none" stroke="#6366f1" stroke-width="1.5" stroke-dasharray="3 2"/>
+      <line x1="90" y1="68" x2="106" y2="52" stroke="#6366f1" stroke-width="3" stroke-linecap="round"/>
+    </g>
+    <text x="105" y="128" class="node-title">Detect</text>
+    <text x="105" y="152" class="node-desc">Monitoring, Threat alerts</text>
+    <text x="105" y="168" class="node-desc">&amp; Notification</text>
+  </g>
+
+  <!-- ================= POSITION 3: RESPOND (BOTTOM-RIGHT) ================= -->
+  <g id="card-respond" transform="translate(570, 460)" filter="url(#card-shadow)">
+    <rect width="210" height="180" class="card" stroke="#2563eb" stroke-width="1" />
+    <rect width="210" height="6" fill="#f97316" rx="3" />
+    <!-- Marine Vessel Vector Icon -->
+    <g transform="translate(15, 0)">
+      <path d="M 68 74 L 76 57 L 104 57 L 108 74 Z" fill="#ffedd5" stroke="#f97316" stroke-width="2.5"/>
+      <path d="M 58 74 L 122 74 C 128 74, 125 85, 118 88 L 64 88 C 57 85, 52 74, 58 74 Z" fill="#ffedd5" stroke="#f97316" stroke-width="2.5" stroke-linejoin="round"/>
+      <path d="M 52 84 C 62 87, 72 81, 82 84 C 92 87, 102 81, 112 84" fill="none" stroke="#0ea5e9" stroke-width="2" stroke-linecap="round"/>
+    </g>
+    <text x="105" y="128" class="node-title">Respond</text>
+    <text x="105" y="152" class="node-desc">Address threat, Permitting,</text>
+    <text x="105" y="168" class="node-desc">Mobilise repair vessel</text>
+  </g>
+
+  <!-- ================= POSITION 4: RECOVER (BOTTOM-LEFT) ================= -->
+  <g id="card-recover" transform="translate(120, 460)" filter="url(#card-shadow)">
+    <rect width="210" height="180" class="card" stroke="#2563eb" stroke-width="1" />
+    <rect width="210" height="6" fill="#0ea5e9" rx="3" />
+    <!-- Cable Coupling / Recovery Vector Icon -->
+    <g transform="translate(15, 0)">
+      <circle cx="72" cy="68" r="12" fill="#e0f2fe" stroke="#0ea5e9" stroke-width="2.5"/>
+      <circle cx="108" cy="68" r="12" fill="#e0f2fe" stroke="#0ea5e9" stroke-width="2.5"/>
+      <path d="M 84 64 L 96 64 L 96 72 L 84 72 Z" fill="#0ea5e9"/>
+      <path d="M 50 68 L 60 68 M 120 68 L 130 68" stroke="#0ea5e9" stroke-width="2.5" stroke-linecap="round"/>
+    </g>
+    <text x="105" y="128" class="node-title">Recover</text>
+    <text x="105" y="152" class="node-desc">Restore service &amp;</text>
+    <text x="105" y="168" class="node-desc">Share and integrate learnings</text>
+  </g>
+
+  <!-- Watermark -->
+  <text x="765" y="740" class="watermark">nodal<tspan class="watermark-accent">/</tspan>ys</text>
+</svg>

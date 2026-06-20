@@ -51,11 +51,41 @@ body{background:#f8fafc;font-family:'Segoe UI',system-ui,-apple-system,sans-seri
 .quote-inner{margin-top:8px;padding:10px 14px;background:#fff;border:1px solid #d1fae5;border-radius:8px;font-size:12.5px;color:#64748b;line-height:1.65;font-style:italic}
 .quote-inner strong{font-style:normal;color:#475569;font-weight:600}
 
+@media(max-width:860px){
+  body{padding:36px 16px}
+  .q-text{font-size:24px;margin-bottom:24px}
+}
+
 @media(max-width:640px){
   body{padding:24px 12px}
-  .q-text{font-size:22px}
+  .q-label{font-size:12px;letter-spacing:1.5px;margin-bottom:10px}
+  .q-text{font-size:20px;margin-bottom:20px}
   .pill-head{padding:12px 14px;gap:10px}
+  .pill-letter{width:28px;height:28px;font-size:13px}
+  .pill-title{font-size:14px}
+  .pill-days{font-size:12px}
   .pill-content{padding:0 14px 16px}
+  .pill-section-label{font-size:10px}
+  .challenge-text{font-size:13px;padding:10px 12px}
+  .solution{padding:8px 12px}
+  .solution-title{font-size:13px}
+  .solution-text{font-size:12px}
+  .solution-ref{font-size:10px}
+  .quote-inner{font-size:11.5px;padding:8px 10px}
+}
+
+@media(max-width:380px){
+  body{padding:16px 8px}
+  .q-text{font-size:18px}
+  .pill{margin-bottom:8px}
+  .pill-head{padding:10px 12px;gap:8px}
+  .pill-letter{width:26px;height:26px;font-size:12px;border-radius:6px}
+  .pill-title{font-size:13px}
+  .pill-days{font-size:11px}
+  .pill-content{padding:0 12px 14px}
+  .challenge-text{padding:8px 10px;font-size:12.5px}
+  .solution{padding:7px 10px}
+  .quote-toggle{font-size:10px}
 }
 </style>
 </head>
